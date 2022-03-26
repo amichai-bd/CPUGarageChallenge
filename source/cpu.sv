@@ -1,15 +1,15 @@
 //-----------------------------------------------------------------------------
-// Title            : 
-// Project          : 
+// Title            : cpu top.
+// Project          : Intel CPU Garrage channge
 //-----------------------------------------------------------------------------
-// File             : 
+// File             : cpu.sv
 // Original Author  : Amichai Ben-David
-// Code Owner       : 
-// Adviser          : Amichai Ben-David
 // Created          : 3/2022
 //-----------------------------------------------------------------------------
 // Description :
-// 
+// A 3 stage pipeline with the memory in the CPU.
+// The memory is merrored to the outside the core for VGA & other to observe.
+
 
 //==============================================
 //      Usful Master Slave FliFlop macros
@@ -142,8 +142,6 @@ ram d_mem (
     .q_b        ()//Second port is for writing only!
 );
 
-
-
 // Sample Ctrl Bits 101 -> 102
 `MSFF(         SelAType102 ,  SelAType101  , Clock)
 `MSFF(         SelAluInM102,  SelAluInM101 , Clock)
@@ -169,24 +167,24 @@ always_comb begin : alu_logic
   AluIn1_102      = D_Data102;
   AluIn2_102      = SelAluInM102 ? M_Data102 : A_Data102;
   unique casez (CtrlAluOp102) 
-    6'b101010: AluData102 = 0 ;                     // 0 
-    6'b111111: AluData102 = 1 ;                     // 1
-    6'b111010: AluData102 = -1;                     //-1
-    6'b001100: AluData102 = AluIn1_102;             // D
-    6'b110000: AluData102 = AluIn2_102;             // A    |  M
-    6'b001101: AluData102 = ~AluIn1_102;            // ~D
-    6'b110001: AluData102 = ~AluIn2_102;            // ~A   |  ~M
-    6'b001111: AluData102 = -AluIn1_102;            // -D
-    6'b110011: AluData102 = -AluIn2_102;            // -A   |  -M
-    6'b011111: AluData102 = AluIn1_102 + 1;         // D+1
-    6'b110111: AluData102 = AluIn2_102 + 1;         // A+1  |  M+1
-    6'b001110: AluData102 = AluIn1_102 - 1;         // D-1
-    6'b110010: AluData102 = AluIn2_102 - 1;         // A-1  |  M-1
-    6'b000010: AluData102 = AluIn1_102 + AluIn2_102;// D+A  |  D+M
-    6'b010011: AluData102 = AluIn1_102 - AluIn2_102;// D-A  |  D-M
-    6'b000111: AluData102 = AluIn2_102 - AluIn1_102;// A-D  |  M-D
-    6'b000000: AluData102 = AluIn1_102 & AluIn2_102;// A&D  |  M&D
-    6'b010101: AluData102 = AluIn1_102 | AluIn2_102;// A|D  |  M|D
+    6'b101010: AluData102 = 0 ;                      // 0 
+    6'b111111: AluData102 = 1 ;                      // 1
+    6'b111010: AluData102 = -1;                      //-1
+    6'b001100: AluData102 = AluIn1_102;              // D
+    6'b110000: AluData102 = AluIn2_102;              // A    |  M
+    6'b001101: AluData102 = ~AluIn1_102;             // ~D
+    6'b110001: AluData102 = ~AluIn2_102;             // ~A   |  ~M
+    6'b001111: AluData102 = -AluIn1_102;             // -D
+    6'b110011: AluData102 = -AluIn2_102;             // -A   |  -M
+    6'b011111: AluData102 = AluIn1_102 + 1;          // D+1
+    6'b110111: AluData102 = AluIn2_102 + 1;          // A+1  |  M+1
+    6'b001110: AluData102 = AluIn1_102 - 1;          // D-1
+    6'b110010: AluData102 = AluIn2_102 - 1;          // A-1  |  M-1
+    6'b000010: AluData102 = AluIn1_102 + AluIn2_102; // D+A  |  D+M
+    6'b010011: AluData102 = AluIn1_102 - AluIn2_102; // D-A  |  D-M
+    6'b000111: AluData102 = AluIn2_102 - AluIn1_102; // A-D  |  M-D
+    6'b000000: AluData102 = AluIn1_102 & AluIn2_102; // A&D  |  M&D
+    6'b010101: AluData102 = AluIn1_102 | AluIn2_102; // A|D  |  M|D
     default  : AluData102 = 0;
   endcase
 
