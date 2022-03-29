@@ -1,0 +1,18 @@
+# vsim work.cpu_garage_tb -c -do "run -all" 
+# Start time: 00:30:02 on Mar 30,2022
+# Loading sv_std.std
+# Loading work.cpu_garage_tb
+# Loading work.cpu_garage
+# Loading work.cpu
+# Loading work.alu
+# Loading work.abd_ram
+# Loading work.abd_rom
+# ** Warning: (vsim-3015) [PCDPC] - Port size (15) does not match connection size (10) for port 'data_addr'. The port definition is at: ./sv/cpu.sv(10).
+#    Time: 0 ps  Iteration: 0  Instance: /cpu_garage_tb/cpu_garage/cpu_inst File: ./sv/cpu_garage.sv Line: 21
+# ** Warning: (vsim-3015) [PCDPC] - Port size (15) does not match connection size (10) for port 'inst_addr'. The port definition is at: ./sv/cpu.sv(11).
+#    Time: 0 ps  Iteration: 0  Instance: /cpu_garage_tb/cpu_garage/cpu_inst File: ./sv/cpu_garage.sv Line: 21
+# run -all
+# ** Note: $finish    : ./sv/cpu_garage_tb.sv(22)
+#    Time: 10 us  Iteration: 0  Instance: /cpu_garage_tb
+# End time: 00:30:21 on Mar 30,2022, Elapsed time: 0:00:19
+# Errors: 0, Warnings: 2
