@@ -1,10 +1,10 @@
 //Source File (PKG, RTL, MACROS)
-./sv/alu.sv
-./sv/cpu.sv
-./sv/definitions.sv
-./sv/abd_ram.sv
-./sv/abd_rom.sv
-./sv/cpu_garage.sv
+../source/alu.sv
+../source/cpu.sv
+../source/definitions.sv
+../source/abd_ram.sv
+../source/abd_rom.sv
+../source/cpu_garage.sv
 
 //Test Bench
-./sv/cpu_garage_tb.sv
+../source/cpu_garage_tb.sv
