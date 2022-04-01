@@ -1,70 +1,33 @@
 # Reading pref.tcl
 # vsim -gui work.cpu_garage_tb 
-# Start time: 20:55:59 on Mar 31,2022
+# Start time: 15:13:06 on Apr 01,2022
 # Loading sv_std.std
 # Loading work.cpu_garage_tb
 # Loading work.cpu_garage
 # Loading work.cpu
+# Loading work.ram
 # Loading work.abd_ram
 # Loading work.abd_rom
-# ** Warning: (vsim-3015) [PCDPC] - Port size (15) does not match connection size (10) for port 'data_addr'. The port definition is at: ../source_abd/cpu.sv(24).
-#    Time: 0 ps  Iteration: 0  Instance: /cpu_garage_tb/cpu_garage/cpu_inst File: ../source_abd/cpu_garage.sv Line: 21
-# ** Warning: (vsim-3015) [PCDPC] - Port size (15) does not match connection size (10) for port 'inst_addr'. The port definition is at: ../source_abd/cpu.sv(25).
-#    Time: 0 ps  Iteration: 0  Instance: /cpu_garage_tb/cpu_garage/cpu_inst File: ../source_abd/cpu_garage.sv Line: 21
+# ** Warning: (vsim-3015) [PCDPC] - Port size (15) does not match connection size (10) for port 'data_addr'. The port definition is at: ../source_abd/cpu.sv(23).
+#    Time: 0 ps  Iteration: 0  Instance: /cpu_garage_tb/cpu_garage/cpu_inst File: ../source/cpu_garage.sv Line: 21
+# ** Warning: (vsim-3015) [PCDPC] - Port size (15) does not match connection size (10) for port 'inst_addr'. The port definition is at: ../source_abd/cpu.sv(24).
+#    Time: 0 ps  Iteration: 0  Instance: /cpu_garage_tb/cpu_garage/cpu_inst File: ../source/cpu_garage.sv Line: 21
 add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/*
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: amichaib  Hostname: AMICHAIB-MOBL  ProcessID: 39752
-#           Attempting to use alternate WLF file "./wlft9z2tj7".
+#           Attempting to use alternate WLF file "./wlfttyjwya".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlft9z2tj7
+#           Using alternate file: ./wlfttyjwya
 run
 run
 run
 run
 run
 run
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/PreA_Data101
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/PreD_Data101
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/A_WrEn102
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/D_WrEn102
-restart
-# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
-# Loading work.cpu_garage_tb
-# Loading work.cpu_garage
-# Loading work.cpu
-# Loading work.abd_ram
-# Loading work.abd_rom
-# ** Warning: (vsim-3015) [PCDPC] - Port size (15) does not match connection size (10) for port 'data_addr'. The port definition is at: ../source_abd/cpu.sv(24).
-#    Time: 0 ps  Iteration: 0  Instance: /cpu_garage_tb/cpu_garage/cpu_inst File: ../source_abd/cpu_garage.sv Line: 21
-# ** Warning: (vsim-3015) [PCDPC] - Port size (15) does not match connection size (10) for port 'inst_addr'. The port definition is at: ../source_abd/cpu.sv(25).
-#    Time: 0 ps  Iteration: 0  Instance: /cpu_garage_tb/cpu_garage/cpu_inst File: ../source_abd/cpu_garage.sv Line: 21
-run
-# GetModuleFileName: The specified module could not be found.
-# 
-# 
 run
 run
 run
 run
 run
-# WARNING: No extended dataflow license exists
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/JmpCondMet102
-# Warning: Unable to determine driver(s) for "sim:/cpu_garage_tb/cpu_garage/cpu_inst/JmpCondMet102"
-add wave -position insertpoint /cpu_garage_tb/cpu_garage/cpu_inst/JmpCond102
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/AluData102
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/CtrlAluOp102
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/AluIn1_102
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/AluIn2_102
-add wave -position insertpoint /cpu_garage_tb/cpu_garage/cpu_inst/AluIn1_102
-# Warning: Unable to determine driver(s) for "sim:/cpu_garage_tb/cpu_garage/cpu_inst/AluIn1_102"
-add wave -position insertpoint /cpu_garage_tb/cpu_garage/cpu_inst/AluIn1_102
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/D_Data102
-add wave -position insertpoint /cpu_garage_tb/cpu_garage/cpu_inst/PreD_Data101
-# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/PreA_Data101
-# Error: invalid command name "::.main_pane.dataflow.interior.cs.body.pw.df.c"
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/NextA_Data102
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/SelAType102
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/Immediate102
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/AluData102
-add wave -position insertpoint sim:/cpu_garage_tb/cpu_garage/cpu_inst/SelAType102
+# End time: 15:22:35 on Apr 01,2022, Elapsed time: 0:09:29
+# Errors: 0, Warnings: 4

@@ -1,6 +1,6 @@
 
 `include "definitions.sv"
-module abd_ram #(
+module ram #(
               parameter DATA_WIDTH         ,
               parameter RAM_REGISTER_COUNT 
               )

@@ -1,5 +1,5 @@
 `include "definitions.sv"
-module abd_rom #(
+module rom #(
               parameter INSTR_WIDTH         ,
               parameter ROM_REGISTER_COUNT 
               )

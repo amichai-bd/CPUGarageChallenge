@@ -2,8 +2,8 @@
 ../source/alu.sv
 ../source/cpu.sv
 ../source/definitions.sv
-../source/abd_ram.sv
-../source/abd_rom.sv
+../source/ram.sv
+../source/rom.sv
 ../source/cpu_garage.sv
 
 //Test Bench

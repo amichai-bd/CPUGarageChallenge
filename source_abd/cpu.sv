@@ -10,7 +10,6 @@
 // A 4 stage pipeline with the memory in the CPU.
 // The memory is merrored to the outside the core for VGA & other to observe.
 
-
 `include "definitions.sv"
 module cpu (
         input logic         clk,
@@ -24,6 +23,7 @@ module cpu (
         output logic [14:0] data_addr,
         output logic [14:0] inst_addr
     );
+
 
 //==============================================
 //      paramters and typdefs
@@ -45,6 +45,17 @@ typedef enum logic {
     C_TYPE = 1'b1 
 } t_inst_type;
 
+typedef enum logic [3:0] {
+    S_CHECK   = 4'b0000,
+    S_SET1_P1 = 4'b0001,
+    S_SET1_P2 = 4'b0010,
+    S_SET1_P3 = 4'b0011,
+    S_SET1_P4 = 4'b0100,
+    S_SET2_P1 = 4'b0101,
+    S_SET2_P2 = 4'b0110,
+    S_SET2_P3 = 4'b0111,
+    S_SET2_P4 = 4'b1000
+} t_state;
 //==============================================
 //      Signal Declaration
 //==============================================
@@ -61,7 +72,8 @@ logic           SelAluInM101,   SelAluInM102;
 logic           SelM_Hzrd102;
 t_inst_type     InstType101 ;
 t_jmp_cond      JmpCond101  ,   JmpCond102  ; 
-
+logic   [4:0]   Count, NextCount;
+t_state         State, NextState;
 //  === Data Path ===
 logic  [15:0]   NextD_Data102,  PreD_Data101,   D_Data101  ,   D_Data102   ;
 logic  [15:0]   PreM_Data102,   M_Data102   ,   FwrM_Data103;
@@ -73,14 +85,23 @@ logic  [15:0]   AluData102;
 logic  [15:0]   Immediate101,   Immediate102;
 
 //assign interface to naming convention
-logic           Clock;
-logic           Reset;
+logic          Clock;
+logic          Reset;
 logic [9:0]    PC100;
-logic [15:0]    Inst101;
-logic [15:0]    M_WrData102;
+logic [9:0]    PC101;
+logic [9:0]    AccPc;
+logic [9:0]    NextAccPc;
+logic [15:0]   Inst101;
+logic [15:0]   InstFromAcc101;
+logic [15:0]   AccInst101;
+logic          SelAccInst101;
+logic [15:0]   M_WrData102;
+logic [15:0]   Sequence[19:0];
+logic          Match;
+logic          EnAccPc;
 //==== input =====
 assign Clock      = clk;
-assign Inst101    = inst;
+assign Inst101    = SelAccInst101 ? InstFromAcc101 : inst;
 assign Reset      = ~resetN;
 //==== output =====
 assign out_m      = AluData102;
@@ -94,8 +115,104 @@ assign inst_addr  = {5'b0,PC100};
 // =======================
 // === Fetch Cycle 100 ===
 // =======================
-assign NextPC100 = JmpCondMet102 ? A_Data102 : (PC100 + 1);
+assign SelPcAcc = ~(State == S_CHECK);
+assign NextPC100 = SelPcAcc         ? AccPc     :
+                   JmpCondMet102    ? A_Data102 : 
+                                     (PC100 + 1);
 `RST_MSFF(PC100 , NextPC100, Clock, Reset)
+`MSFF(PC101 , PC100, Clock)
+
+// ========================
+// === accelerator to detect & calc the divider ===
+// ========================
+always_comb begin 
+Sequence[0]  =16'b0100111000100000;
+Sequence[1]  =16'b1110110000010000;
+Sequence[2]  =16'b0000000000000010;
+Sequence[3]  =16'b1110001100001000;
+Sequence[4]  =16'b0000000000001010;
+Sequence[5]  =16'b1110110000010000;
+Sequence[6]  =16'b0000000000000011;
+Sequence[7]  =16'b1110001100001000;
+Sequence[8]  =16'b0000000000000001;
+Sequence[9]  =16'b1111110111001000;
+Sequence[10] =16'b0000000000000010;
+Sequence[11] =16'b1111110000010000;
+Sequence[12] =16'b0000000000000011;
+Sequence[13] =16'b1111010011010000;
+Sequence[14] =16'b0000000000000010;
+Sequence[15] =16'b1110001100001000;
+Sequence[16] =16'b0000000000000010;
+Sequence[17] =16'b1111110000010000;
+Sequence[18] =16'b0000000000010100;
+Sequence[19] =16'b1110001100000001;
+//defualt values
+InstFromAcc101  = '0;
+NextCount       = '0;
+Match           = (Sequence[Count] == Inst101);
+EnAccPc         = 1'b0;
+SelAccInst101   = 1'b0;
+unique casez (State)
+    S_CHECK   : begin
+        NextState       = (Count == 19)  ? S_SET1_P1         : S_CHECK;
+        NextCount       = Match          ? (Count + 5'b1) : '0; 
+        InstFromAcc101  = '0;
+        EnAccPc         = (Count == 19);
+    end 
+    S_SET1_P1      : begin
+        NextState       = S_SET1_P2;
+        InstFromAcc101  = 16'b0000011111010000; //@2,000
+        SelAccInst101   = 1'b1;
+    end 
+    S_SET1_P2      : begin
+        NextState       = S_SET1_P3;
+        InstFromAcc101  = 16'b1110110000010000; //D = A
+        SelAccInst101     = 1'b1;
+    end 
+    S_SET1_P3      : begin
+        NextState       = S_SET1_P4;
+        InstFromAcc101  = 16'b0000000000000001; //@1
+        SelAccInst101   = 1'b1;
+    end 
+    S_SET1_P4      : begin
+        NextState       = S_SET2_P1;
+        InstFromAcc101  = 16'b1110001100001000; //M[1] = D -> M[1] == 2,000
+        SelAccInst101   = 1'b1;
+    end 
+    S_SET2_P1      : begin
+        NextState       = S_SET2_P2;
+        InstFromAcc101  = 16'b0000000000000000; //@0
+        SelAccInst101   = 1'b1;
+    end 
+    S_SET2_P2      : begin
+        NextState       = S_SET2_P3;
+        InstFromAcc101  = 16'b1110110000010000; //D = A
+        SelAccInst101   = 1'b1;
+    end 
+    S_SET2_P3      : begin
+        NextState       = S_SET2_P4;
+        InstFromAcc101  = 16'b0000000000000010; //@2
+        SelAccInst101   = 1'b1;
+    end 
+    S_SET2_P4      : begin
+        NextState       = S_CHECK;
+        InstFromAcc101  = 16'b1110001100001000; //M[2] = D -> M[2] == 0
+        SelAccInst101   = 1'b1;
+    end 
+    default       : begin
+        NextState       = S_CHECK;
+        InstFromAcc101  = '0;
+    end
+
+endcase 
+end //always_comb
+
+assign NextAccPc = (PC101);
+`RST_MSFF(     Count, NextCount, Clock , Reset )
+`EN_MSFF (     AccPc, NextAccPc, Clock , EnAccPc)
+`RST_VAL_MSFF( State, NextState, Clock , Reset, S_CHECK)
+
+
 
 // ========================
 // === Decode Cycle 101 ===
@@ -111,8 +228,8 @@ assign CtrlAluOp101 = Inst101[11:6];  // See Spec for details. Inst101[11:6] = O
 assign SelAluInM101 = Inst101[12];    // See Spec for details. Inst101[12] = A_vs_M.
 
 // -- Data Path -- 
-assign NwxtA_Data102 = SelAType102 ? Immediate102 : AluData102;
-assign NwxtD_Data102 = AluData102;
+assign NextA_Data102 = SelAType102 ? Immediate102 : AluData102;
+assign NextD_Data102 = AluData102;
 `EN_MSFF(PreA_Data101, NextA_Data102,   Clock, A_WrEn102)
 `EN_MSFF(PreD_Data101, NextD_Data102,   Clock, D_WrEn102)
 // Forwording unit:
@@ -120,8 +237,8 @@ assign A_Data101 = A_WrEn102 ? NextA_Data102 : PreA_Data101;
 assign D_Data101 = D_WrEn102 ? NextD_Data102 : PreD_Data101;
 
 // Reading & Writing from Memory using A_Register as address.
-abd_ram #(.DATA_WIDTH           (16),
-          .RAM_REGISTER_COUNT   (2**10))
+ram #(.DATA_WIDTH           (16),
+      .RAM_REGISTER_COUNT   (2**10))
         ram_inst (
     .address_a  (A_Data101[9:0]),//Read
     .address_b  (A_Data102[9:0]),//Write
@@ -143,6 +260,7 @@ abd_ram #(.DATA_WIDTH           (16),
 `RST_MSFF(     M_WrEn102   ,  M_WrEn101    , Clock , (Reset || RstCtrlJmp103) )
 `RST_VAL_MSFF( JmpCond102  ,  JmpCond101   , Clock , (Reset || RstCtrlJmp103) , NO_JMP)
 // Sample Data Path 101 -> 102 
+assign Immediate101 = Inst101;
 `MSFF(         A_Data102   , A_Data101     , Clock)
 `MSFF(         D_Data102   , D_Data101     , Clock)
 `MSFF(         Immediate102, Immediate101  , Clock)
@@ -199,10 +317,6 @@ end //always_comb alu_logic
 `RST_MSFF( M_WrEn103    , M_WrEn102     ,  Clock, Reset)
 //RstCtrlJmp103 used to "flush" the pipe when jmp -> Rst the 102 CTRL for 2 cycles. (Sync Reset)
 `RST_MSFF( JmpCondMet103, JmpCondMet102 ,  Clock, Reset)
-assign RstCtrlJmp103 = JmpCondMet103 || JmpCondMet102;
-
-
-
-
+assign RstCtrlJmp103 = (JmpCondMet103 || JmpCondMet102) && (~SelAccInst101);
 
 endmodule
