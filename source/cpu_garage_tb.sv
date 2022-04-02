@@ -55,16 +55,16 @@ always @(posedge Clock) begin : memory_access_print
         cpu_garage_tb.cpu_garage.ram_address ,
         cpu_garage_tb.cpu_garage.cpu_out_m);
     end //if
-    if (cpu_garage_tb.cpu_garage.cpu_inst.A_WrEn101) begin 
-        $fwrite(trk_reg_access,"%t\t|WRITE A\t| %8h\t| \n", 
-        $realtime,
-        cpu_garage_tb.cpu_garage.cpu_inst.A_Data101);
-    end //if
-    if (cpu_garage_tb.cpu_garage.cpu_inst.D_WrEn101) begin 
-        $fwrite(trk_reg_access,"%t\t|WRITE A\t| %8h\t| \n", 
-        $realtime,
-        cpu_garage_tb.cpu_garage.cpu_inst.D_Data101);
-    end //if
+    //if (cpu_garage_tb.cpu_garage.cpu_inst.A_WrEn101) begin 
+    //    $fwrite(trk_reg_access,"%t\t|WRITE A\t| %8h\t| \n", 
+    //    $realtime,
+    //    cpu_garage_tb.cpu_garage.cpu_inst.A_Data101);
+    //end //if
+    //if (cpu_garage_tb.cpu_garage.cpu_inst.D_WrEn101) begin 
+    //    $fwrite(trk_reg_access,"%t\t|WRITE A\t| %8h\t| \n", 
+    //    $realtime,
+    //    cpu_garage_tb.cpu_garage.cpu_inst.D_Data101);
+    //end //if
 end //shared_space
 
 endmodule // test_tb
