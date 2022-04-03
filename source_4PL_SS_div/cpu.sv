@@ -47,7 +47,13 @@ typedef enum logic {
     A_TYPE = 1'b0,
     C_TYPE = 1'b1 
 } t_inst_type;
-
+typedef enum logic [3:0] {
+    S_CHECK   = 4'b0000,
+    S_SET1_P1 = 4'b0001,
+    S_SET1_P2 = 4'b0010,
+    S_SET2_P1 = 4'b0101,
+    S_SET2_P2 = 4'b0110
+} t_state;
 //==============================================
 //      Signal Declaration
 //==============================================
@@ -81,17 +87,36 @@ logic  [15:0]   Immediate101,   Immediate102;
 //assign interface to naming convention
 logic           Clock;
 logic           Reset;
+logic [9:0]    NextAccPc;
+logic [9:0]    AccPc;
 logic [9:0]    PC100;
+logic [9:0]    PC101;
 logic [15:0]    Inst0_101;
 logic [15:0]    Inst1_101;
 logic [15:0]    M_WrData102;
 logic SsHit101, SsHit102, LoadDfromA101, LoadMfromD101, LoadDfromM101, LoadDfromDminusM101, LoadDfromDplusM101, LoadMfromMplusOne101;
 logic SelImmAsAluOut102,   SelImmAsAluOut101;
 logic less_than_zero, greater_than_zero, zero;
+logic SelPcAcc;
+logic          Match0;
+logic          Match1;
+logic          SelAccInst101;
+logic          EnAccPc;
+logic [15:0]   Inst0FromAcc101;
+logic [15:0]   Inst1FromAcc101;
+logic [15:0]   Sequence[19:0];
+logic [4:0]    Count, NextCount;
+t_state        State, NextState;
 //==== input =====
+
+
 assign Clock      = clk;
-assign Inst0_101    = SsHit102 ? inst_1 : inst_0;
-assign Inst1_101    = SsHit102 ? inst_2 : inst_1;
+assign Inst0_101  = SelAccInst101   ? Inst0FromAcc101: 
+                    SsHit102        ? inst_1         : 
+                                      inst_0         ;
+assign Inst1_101  = SelAccInst101   ? Inst1FromAcc101: 
+                    SsHit102        ? inst_2         : 
+                                      inst_1         ;
 assign Reset      = ~resetN;
 //==== output =====
 assign out_m      = OutAluData103;
@@ -105,10 +130,14 @@ assign inst_addr  = {5'b0,PC100};
 // =======================
 // === Fetch Cycle 100 ===
 // =======================
-assign NextPC100 = JmpCondMet102 ?  A_Data102[9:0]  :
-                   SsHit101      ?  (PC100 + 10'd2) :
+
+assign SelPcAcc = ~(State == S_CHECK);
+assign NextPC100 =  SelPcAcc      ? AccPc           :
+                    JmpCondMet102 ? A_Data102[9:0]  :
+                    SsHit101      ? (PC100 + 10'd2) :
                                     (PC100 + 10'd1) ;
 `RST_MSFF(PC100 ,    NextPC100, Clock, Reset)
+`MSFF(PC101 , PC100, Clock)
 
 // ========================
 // === Decode Cycle 101 ===
@@ -129,7 +158,6 @@ always_comb begin
     LoadDfromDminusM101  = (Inst0_101[15] == 1'b0) && (Inst1_101 == 16'b1111010011010000); // "@xxx" && "D = D - M"
     LoadDfromDplusM101   = (Inst0_101[15] == 1'b0) && (Inst1_101 == 16'b1111000010010000); // "@xxx" && "D = D + M"
     LoadMfromMplusOne101 = (Inst0_101[15] == 1'b0) && (Inst1_101 == 16'b1111110111001000); // "@xxx" && "M = M + 1"
-    //TODO add support to "@xxx" && "D ;JGT"
 
     SsHit101 = (LoadDfromA101       || LoadMfromD101      || LoadDfromM101  || 
                 LoadDfromDminusM101 || LoadDfromDplusM101 || LoadMfromMplusOne101) 
@@ -174,6 +202,71 @@ always_comb begin
 end// always_comb
 
 `RST_MSFF(SsHit102 , SsHit101,  Clock, Reset)
+// ========================
+// === accelerator to detect & calc the divider ===
+// ========================
+
+always_comb begin 
+Sequence[0]  =16'b0100111000100000; Sequence[1]  =16'b1110110000010000; Sequence[2]  =16'b0000000000000010;
+Sequence[3]  =16'b1110001100001000; Sequence[4]  =16'b0000000000001010; Sequence[5]  =16'b1110110000010000;
+Sequence[6]  =16'b0000000000000011; Sequence[7]  =16'b1110001100001000; Sequence[8]  =16'b0000000000000001;
+Sequence[9]  =16'b1111110111001000; Sequence[10] =16'b0000000000000010; Sequence[11] =16'b1111110000010000;
+Sequence[12] =16'b0000000000000011; Sequence[13] =16'b1111010011010000; Sequence[14] =16'b0000000000000010;
+Sequence[15] =16'b1110001100001000; Sequence[16] =16'b0000000000000010; Sequence[17] =16'b1111110000010000;
+Sequence[18] =16'b0000000000010100; Sequence[19] =16'b1110001100000001;
+//defualt values
+Inst0FromAcc101  = '0;
+Inst1FromAcc101  = '0;
+NextCount       = '0;
+Match0          = (Sequence[Count]   == Inst0_101);
+Match1          = (Sequence[Count+1] == Inst1_101);
+EnAccPc         = 1'b0;
+SelAccInst101   = 1'b0;
+unique casez (State)
+    S_CHECK   : begin
+        NextState       = (Count == 16)    ? S_SET1_P1      : S_CHECK;
+        NextCount       = Match0 && Match1 ? (Count + 5'd2) : '0; 
+        Inst0FromAcc101 = '0;
+        Inst1FromAcc101 = '0;
+        EnAccPc         = (Count == 16);
+    end 
+    S_SET1_P1 : begin
+        NextState       = S_SET1_P2;
+        Inst0FromAcc101 = 16'b0000011111010000; //@2,000
+        Inst1FromAcc101 = 16'b1110110000010000; //D = A
+        SelAccInst101   = 1'b1;
+    end 
+    S_SET1_P2 : begin
+        NextState       = S_SET2_P1;
+        Inst0FromAcc101 = 16'b0000000000000001; //@1
+        Inst1FromAcc101 = 16'b1110001100001000; //M[1] = D -> M[1] == 2,000
+        SelAccInst101   = 1'b1;
+    end 
+    S_SET2_P1 : begin
+        NextState       = S_SET2_P2;
+        Inst0FromAcc101 = 16'b0000000000000000; //@0
+        Inst1FromAcc101 = 16'b1110110000010000; //D = A
+        SelAccInst101   = 1'b1;
+    end 
+    S_SET2_P2 : begin
+        NextState       = S_CHECK;
+        Inst0FromAcc101 = 16'b0000000000000010; //@2
+        Inst1FromAcc101 = 16'b1110001100001000; //M[2] = D -> M[2] == 0
+        SelAccInst101   = 1'b1;
+    end 
+    default   : begin
+        NextState       = S_CHECK;
+        Inst0FromAcc101  = '0;
+        Inst1FromAcc101  = '0;
+    end
+endcase 
+end //always_comb
+
+assign NextAccPc = (PC101);
+`RST_MSFF(     Count, NextCount, Clock , Reset )
+`EN_MSFF (     AccPc, NextAccPc, Clock , EnAccPc)
+`RST_VAL_MSFF( State, NextState, Clock , Reset, S_CHECK)
+
 // -- Data Path -- 
 //assign NextA_Data102 = SelAType102 ? Immediate102 : AluData102;
 assign NextA_Data101 = Immediate101;//TODO - Not supporting Load from ALU Out.
