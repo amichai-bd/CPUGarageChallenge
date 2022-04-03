@@ -13,21 +13,28 @@ module cpu_garage(
     logic [DATA_WIDTH-1:0]                 rdata;
     logic resetN;
     //CPU AND ROM
-    logic [INSTR_WIDTH-1:0]                instruction;
+    logic [INSTR_WIDTH-1:0]                instruction_0;
+    logic [INSTR_WIDTH-1:0]                instruction_1;
+    logic [INSTR_WIDTH-1:0]                instruction_2;
+    logic [INSTR_WIDTH-1:0]                instruction_3;
     logic [DATA_WIDTH-1:0]                 cpu_out_m;
     logic [$clog2(ROM_REGISTER_COUNT)-1:0] inst_address;
     assign resetN = ~Reset;
-
+logic [4:0] nothing0;
+logic [4:0] nothing1;
     cpu cpu_inst (
             .clk        (Clk),
             .SW         ('0),
-            .inst       (instruction),
+            .inst_0     (instruction_0),
+            .inst_1     (instruction_1),
+            .inst_2     (instruction_2),
+            .inst_3     (instruction_3),
             .in_m       (rdata),
             .resetN     (resetN),
             .out_m      (cpu_out_m),
             .write_m    (we),
-            .data_addr  (ram_address),
-            .inst_addr  (inst_address)
+            .data_addr  ({nothing0,ram_address}),
+            .inst_addr  ({nothing1,inst_address})
         );
 
     ram #(.DATA_WIDTH           (DATA_WIDTH),
@@ -48,12 +55,35 @@ module cpu_garage(
 
     rom #(.INSTR_WIDTH          (INSTR_WIDTH),
               .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
-        rom_inst
+        rom_inst_0
         (
             .address    (inst_address),
             .clock      (Clk),
-            .q          (instruction)
+            .q          (instruction_0)
         );
-
+    rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_1
+        (
+            .address    (inst_address + 10'd1),
+            .clock      (Clk),
+            .q          (instruction_1)
+        );
+    rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_2
+        (
+            .address    (inst_address + 10'd2),
+            .clock      (Clk),
+            .q          (instruction_2)
+        );
+    rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_3
+        (
+            .address    (inst_address +10'd3),
+            .clock      (Clk),
+            .q          (instruction_3)
+        );
 endmodule
 

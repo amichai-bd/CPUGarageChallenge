@@ -17,7 +17,8 @@ module cpu_garage(
     logic [DATA_WIDTH-1:0]                 cpu_out_m;
     logic [$clog2(ROM_REGISTER_COUNT)-1:0] inst_address;
     assign resetN = ~Reset;
-
+logic [4:0] nothing0;
+logic [4:0] nothing1;
     cpu cpu_inst (
             .clk        (Clk),
             .SW         ('0),
@@ -26,8 +27,8 @@ module cpu_garage(
             .resetN     (resetN),
             .out_m      (cpu_out_m),
             .write_m    (we),
-            .data_addr  (ram_address),
-            .inst_addr  (inst_address)
+            .data_addr  ({nothing0,ram_address}),
+            .inst_addr  ({nothing1,inst_address})
         );
 
     ram #(.DATA_WIDTH           (DATA_WIDTH),
