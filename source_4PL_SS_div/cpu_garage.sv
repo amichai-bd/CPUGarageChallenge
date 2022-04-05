@@ -28,7 +28,7 @@ logic [4:0] nothing1;
             .inst_0     (instruction_0),
             .inst_1     (instruction_1),
             .inst_2     (instruction_2),
-            .inst_3     (instruction_3),
+            //.inst_3     (instruction_3),
             .in_m       (rdata),
             .resetN     (resetN),
             .out_m      (cpu_out_m),
