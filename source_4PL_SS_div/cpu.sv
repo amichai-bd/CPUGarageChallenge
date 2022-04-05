@@ -7,14 +7,15 @@
 // Created          : 3/2022
 //-----------------------------------------------------------------------------
 // Description :
-// A 4 stage pipeline with the memory in the CPU.
+// A 4 stage pipeline of the Nand2Tetris HACK CPU.
 // The memory is merrored to the outside the core for VGA & other to observe.
-
+// Added Accelerator to detect division operation and excecute them with ditcated logic.
+// Able to excecute 2 instruciton per cycle  A type + C Type.
 
 `include "definitions.sv"
 module cpu (
         input logic         clk,
-        input logic [3:0]   SW,
+        input logic [3:0]   SW, //Not in Use.
         input logic [15:0]  inst_0,
         input logic [15:0]  inst_1,
         input logic [15:0]  inst_2,
@@ -42,7 +43,6 @@ typedef enum logic [2:0] {
     JLE	   = 3'b110,
     JMP	   = 3'b111
 } t_jmp_cond ;
-
 typedef enum logic {
     A_TYPE = 1'b0,
     C_TYPE = 1'b1 
@@ -63,11 +63,11 @@ logic           D_WrEn101   ,   D_WrEn102   ;
 logic           A_WrEn101   ,   A_WrEn102   ,A_WrEnImm101;
 logic           M_WrEn101   ,   M_WrEn102   , M_WrEn103, M_WrEn104, OutM_WrEn103;
 logic           SelAType101 ;
-logic           JmpCondMet102, JmpCondMet103;
+logic           JmpCondMet102,      JmpCondMet103;
 logic           RstCtrlJmp103;
-logic           CtrlDataHzrdM102, CtrlDataHzrdM103;
-logic  [5:0]    CtrlAluOp101,   CtrlAluOp102;
-logic           SelMorA101,   SelMorA102;
+logic           CtrlDataHzrdM102,   CtrlDataHzrdM103;
+logic  [5:0]    CtrlAluOp101,       CtrlAluOp102;
+logic           SelMorA101,         SelMorA102;
 t_inst_type     InstType101 ;
 t_jmp_cond      JmpCond101  ,   JmpCond102  ; 
 
@@ -87,9 +87,9 @@ logic  [15:0]   Immediate101,   Immediate102;
 //assign interface to naming convention
 logic           Clock;
 logic           Reset;
-logic [9:0]    NextAccPc;
-logic [9:0]    AccPc;
-logic [9:0]    PC100;
+logic [9:0]     NextAccPc;
+logic [9:0]     AccPc;
+logic [9:0]     PC100;
 logic [15:0]    Inst0_101;
 logic [15:0]    Inst1_101;
 logic SsHit101, SsHit102, LoadDfromA101, LoadMfromD101, LoadDfromM101, LoadDfromDminusM101, LoadDfromDplusM101, LoadMfromMplusOne101;
@@ -113,7 +113,7 @@ assign Inst0_101  = SelAccInst101   ? Inst0FromAcc101:
                     SsHit102        ? inst_1         : 
                                       inst_0         ;
 assign Inst1_101  = SelAccInst101   ? Inst1FromAcc101: 
-                    SsHit102        ? inst_2         : 
+                    SsHit102        ? inst_2         :
                                       inst_1         ;
 assign Reset      = ~resetN;
 //==== output =====
@@ -209,7 +209,7 @@ logic MatchP1Div102, MatchP2Div102, MatchP3Div102, MatchP4Div102;
 logic StartDiv102;
 assign History[0] = Inst1_101;
 assign History[1] = Inst0_101;
-`EN_RST_MSFF(History[23:2] , History[21:0], Clock, (State == S_CHECK), Reset) //shift 2
+`EN_RST_MSFF(History[23:2] , History[21:0], Clock, (State == S_CHECK), Reset) //Shift 2 every Cycle
 assign MatchP1Div101 =  (History[23]     == 16'b0)&& (History[22] == 16'b1110110000010000) && //D     = 0             | (LIP) @0  , D = A
                         (History[21][15] == 1'b0) && (History[20] == 16'b1110001100001000) && //M[X1] = D  | Quation  | @1        , M = D
                         (History[19][15] == 1'b0) && (History[18] == 16'b1110110000010000) ;  //D     = Divident      | @20000    , D = A
@@ -232,14 +232,14 @@ logic Done;
 logic [15:0] Quotient;
 logic [15:0] Reminder;
 div #( .MSB(15) ) div (
-    .Clk            (Clock),      //input     logic         
-    .Reset          (Reset),      //input     logic         
+    .Clk            (Clock),        //input     logic         
+    .Reset          (Reset),        //input     logic         
     .InDivident     (History[19+2]),//input     logic [MSB:0] 
     .InDivisor      (History[15+2]),//input     logic [MSB:0] 
-    .OutReminder    (Reminder),   //output    logic [MSB:0] 
-    .OutQuotient    (Quotient),   //output    logic [MSB:0] 
-    .Start          (StartDiv102),//input     logic         
-    .Done           (Done)        //output    logic   
+    .OutReminder    (Reminder),     //output    logic [MSB:0] 
+    .OutQuotient    (Quotient),     //output    logic [MSB:0] 
+    .Start          (StartDiv102),  //input     logic         
+    .Done           (Done)          //output    logic   
     );       
 always_comb begin 
 //Sequence[0]  =16'b0100111000100000;    Sequence[1]  =16'b1110110000010000;// @20000    , D = A
@@ -320,7 +320,6 @@ assign NextD_Data102 = AluData102;
 `EN_MSFF(PreA_Data101,  NextA_Data102,   Clock, A_WrEn102 || A_WrEnImm101)
 `EN_MSFF(PreD_Data101,  NextD_Data102,   Clock, D_WrEn102)
 // Forwording unit:
-
 assign A_Data101 = SsHit101  ? Immediate101  : PreA_Data101;
 assign D_Data101 = D_WrEn102 ? NextD_Data102 : PreD_Data101;
 
@@ -378,6 +377,7 @@ assign   AluIn2_102      = SelMorA102 ? M_Data102 : A_Data102;
             .fn(CtrlAluOp102),
             .zero(zero)
         );
+
 assign  AluData102          = SelImmAsAluOut102 ? Immediate102 : PreAluData102;
 // Jump condition:
 assign  less_than_zero      = AluData102[15];
@@ -398,7 +398,6 @@ assign  JmpCondMet102       = (less_than_zero && JmpCond102[2]) ||
 //RstCtrlJmp103 used to "flush" the pipe when jmp -> Rst the 102 CTRL for 2 cycles. (Sync Reset)
 `RST_MSFF( JmpCondMet103, JmpCondMet102 ,  Clock, Reset)
 assign RstCtrlJmp103 = JmpCondMet103 || JmpCondMet102;
-
 
 // Sample Data Path 103 -> 104 (Used for Forwording unit & Hazard on the D_MEM read after Write
 `MSFF(     A_Data104    , A_Data103     ,  Clock)
