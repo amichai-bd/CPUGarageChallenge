@@ -19,6 +19,13 @@ module cpu (
         input logic [15:0]  inst_0,
         input logic [15:0]  inst_1,
         input logic [15:0]  inst_2,
+        input logic [15:0]  inst_3,
+        input logic [15:0]  inst_4,
+        input logic [15:0]  inst_5,
+        input logic [15:0]  inst_6,
+        input logic [15:0]  inst_7,
+        input logic [15:0]  inst_8,
+        input logic [15:0]  inst_9,
         //input logic [15:0]  inst_3,
         input logic [15:0]  in_m,
         input logic         resetN,
@@ -90,8 +97,17 @@ logic           Reset;
 logic [9:0]     NextAccPc;
 logic [9:0]     AccPc;
 logic [9:0]     PC100;
+logic [9:0]     PC101;
 logic [15:0]    Inst0_101;
 logic [15:0]    Inst1_101;
+logic [15:0]    Inst2_101;
+logic [15:0]    Inst3_101;
+logic [15:0]    Inst4_101;
+logic [15:0]    Inst5_101;
+logic [15:0]    Inst6_101;
+logic [15:0]    Inst7_101;
+logic [15:0]    Inst8_101;
+logic [15:0]    Inst9_101;
 logic SsHit101, SsHit102, LoadDfromA101, LoadMfromD101, LoadDfromM101, LoadDfromDminusM101, LoadDfromDplusM101, LoadMfromMplusOne101;
 logic SelImmAsAluOut102,   SelImmAsAluOut101;
 logic less_than_zero, greater_than_zero, zero;
@@ -105,17 +121,41 @@ logic [15:0]   Inst1FromAcc101;
 logic [15:0]   Sequence[19:0];
 //logic [4:0]    Count, NextCount;
 t_state        State, NextState;
-//==== input =====
-
-
+logic PreLoadDM_ImmMinuseMinuseM;
+logic PreLoadDM_ImmMinuseMinusePlusM;
+logic LoadDM_ImmMinuseMinuseM;
+logic LoadDM_ImmMinuseMinusePlusM;
+logic JmpSSHit101;
+logic JmpSSHit102;
+logic SelSs8Calc101;
+logic SelSs10Calc101;
+logic SelSs8Calc102;
+logic SelSs10Calc102;
+logic [15:0] Ss8Calc102  ;
+logic [15:0] Ss10Calc102 ;
+logic [15:0] M1Data102 , M4Data102 , M555Data102;
+logic [15:0] M1Data101 , M4Data101 , M555Data101;
+logic   M1WrEn102  , M4WrEn102  , M555WrEn102;
+logic [15:0] PreM1Data101 , PreM4Data101 , PreM555Data101;
+logic [15:0] NextM1Data102 , NextM4Data102 , NextM555Data102;
+assign Reset      = ~resetN;
 assign Clock      = clk;
 assign Inst0_101  = SelAccInst101   ? Inst0FromAcc101: 
+                    JmpSSHit102     ? '0             :
                     SsHit102        ? inst_1         : 
                                       inst_0         ;
 assign Inst1_101  = SelAccInst101   ? Inst1FromAcc101: 
+                    JmpSSHit102     ? '0             :
                     SsHit102        ? inst_2         :
                                       inst_1         ;
-assign Reset      = ~resetN;
+assign Inst2_101  = inst_2;
+assign Inst3_101  = inst_3;
+assign Inst4_101  = inst_4;
+assign Inst5_101  = inst_5;
+assign Inst6_101  = inst_6;
+assign Inst7_101  = inst_7;
+assign Inst8_101  = inst_8;
+assign Inst9_101  = inst_9;
 //==== output =====
 assign out_m      = OutAluData103;
 assign write_m    = OutM_WrEn103 ;
@@ -132,14 +172,18 @@ assign inst_addr  = {5'b0,PC100};
 assign SelPcAcc = ~(State == S_CHECK);
 assign NextPC100 =  SelPcAcc      ? AccPc           :
                     JmpCondMet102 ? A_Data102[9:0]  :
+                    SelSs8Calc101 ? (PC100 + 10'd7) :
+                    SelSs10Calc101? (PC100 + 10'd9) :
                     SsHit101      ? (PC100 + 10'd2) :
                                     (PC100 + 10'd1) ;
 `RST_MSFF(PC100 ,    NextPC100, Clock, Reset)
+`MSFF(PC101 ,    PC100    , Clock)
 
 // ========================
 // === Decode Cycle 101 ===
 // ========================
 // -- ctrl bits --
+
 always_comb begin
     InstType101  = (Inst0_101[15] == 1'b0) ? A_TYPE : C_TYPE; // (Inst0_101[15:13] == 3'b111) -> C_TYPE
     M_WrEn101    = (InstType101 == C_TYPE) && Inst0_101[3];
@@ -156,6 +200,31 @@ always_comb begin
     LoadDfromDminusM101  = (Inst0_101[15] == 1'b0) && (Inst1_101 == 16'b1111010011010000); // "@xxx" && "D = D - M"
     LoadDfromDplusM101   = (Inst0_101[15] == 1'b0) && (Inst1_101 == 16'b1111000010010000); // "@xxx" && "D = D + M"
     LoadMfromMplusOne101 = (Inst0_101[15] == 1'b0) && (Inst1_101 == 16'b1111110111001000); // "@xxx" && "M = M + 1"
+    
+    PreLoadDM_ImmMinuseMinuseM =   (Inst0_101[15] == 1'b0                ) && // @XXX
+                                (Inst1_101     == 16'b1110110000010000) && // D = A
+                                (Inst2_101     == 16'b0000000000000001) && // @1
+                                (Inst3_101     == 16'b1111010011010000) && // D = D - M
+                                (Inst4_101     == 16'b0000000000000100) && // @4
+                                (Inst5_101     == 16'b1111010011010000) && // D = D - M
+                                (Inst6_101[15] == 1'b0                ) && // @XXX
+                                (Inst7_101     == 16'b1110001100001000) ;  // M = D
+
+    PreLoadDM_ImmMinuseMinusePlusM =(Inst0_101[15] == 1'b0                ) && // @XXX
+                                    (Inst1_101     == 16'b1110110000010000) && // D = A
+                                    (Inst2_101     == 16'b0000000000000001) && // @1
+                                    (Inst3_101     == 16'b1111010011010000) && // D = D - M
+                                    (Inst4_101     == 16'b0000000000000100) && // @4
+                                    (Inst5_101     == 16'b1111010011010000) && // D = D - M
+                                    (Inst6_101     == 16'b0000001000101011) && // @555
+                                    (Inst7_101     == 16'b1111000010010000) && // D = D + M
+                                    (Inst8_101[15] == 1'b0                ) && // @XXX
+                                    (Inst9_101     == 16'b1110001100001000) ; // M = D
+    LoadDM_ImmMinuseMinuseM       = PreLoadDM_ImmMinuseMinuseM       && (State == S_CHECK);
+    LoadDM_ImmMinuseMinusePlusM   = PreLoadDM_ImmMinuseMinusePlusM   && (State == S_CHECK);
+    SelSs8Calc101                 = LoadDM_ImmMinuseMinuseM;
+    SelSs10Calc101                = LoadDM_ImmMinuseMinusePlusM;
+    JmpSSHit101                   = (SelSs8Calc101 || SelSs10Calc101);
 
     SsHit101 = (LoadDfromA101       || LoadMfromD101      || LoadDfromM101  || 
                 LoadDfromDminusM101 || LoadDfromDplusM101 || LoadMfromMplusOne101) 
@@ -197,9 +266,17 @@ always_comb begin
         CtrlAluOp101 = 6'b000010;   // AluOut = D + M;
         SelMorA101   = 1'b1;        // Sel M as ALU Input
     end
+    if(LoadDM_ImmMinuseMinuseM || LoadDM_ImmMinuseMinusePlusM ) begin         // "@xxx" && "M = D"
+        M_WrEn101    = 1'b1;
+        A_WrEnImm101 = 1'b1;
+        CtrlAluOp101 = 6'b101010;   // AluOut = 0; - not in use for this operation
+    end
 end// always_comb
 
-`RST_MSFF(SsHit102 , SsHit101,  Clock, Reset)
+`RST_MSFF(SsHit102 ,     SsHit101,  Clock, Reset)
+`RST_MSFF(SelSs8Calc102 ,SelSs8Calc101  ,  Clock, Reset)
+`RST_MSFF(SelSs10Calc102,SelSs10Calc101 ,  Clock, Reset)
+`RST_MSFF(JmpSSHit102 , JmpSSHit101,  Clock, Reset)
 // ========================================================================
 // === accelerator to detect & calc the Quation && Remainder             ===
 // ========================================================================
@@ -310,16 +387,18 @@ assign NextAccPc = (PC100);
 // -- Data Path -- 
 assign NextA_Data102 = SelAType101 ? Immediate101 : AluData102;
 assign NextD_Data102 = AluData102;
-`EN_MSFF(PreA_Data101,  NextA_Data102,   Clock, A_WrEn102 || A_WrEnImm101)
-`EN_MSFF(PreD_Data101,  NextD_Data102,   Clock, D_WrEn102)
+`EN_MSFF(PreA_Data101    , NextA_Data102,    Clock, A_WrEn102 || A_WrEnImm101)
+`EN_MSFF(PreD_Data101    , NextD_Data102,    Clock, D_WrEn102)
 // Forwording unit:
-assign A_Data101 = SsHit101  ? Immediate101  : PreA_Data101;
-assign D_Data101 = D_WrEn102 ? NextD_Data102 : PreD_Data101;
+assign A_Data101    =   SelSs8Calc101  ? Inst6_101       : 
+                        SelSs10Calc101 ? Inst8_101       :
+                        SsHit101       ? Immediate101    : PreA_Data101;
+assign D_Data101    =   D_WrEn102      ? NextD_Data102   : PreD_Data101;
 
 // Reading & Writing from Memory using A_Register as address.
 ram #(.DATA_WIDTH          (16),
      .RAM_REGISTER_COUNT   (2**10))
-        ram_inst (
+        ram_inst1 (
     .address_a  (A_Data101[9:0]),//Read
     .address_b  (A_Data103[9:0]),//Write
     .clock_a    (Clock),
@@ -331,6 +410,25 @@ ram #(.DATA_WIDTH          (16),
     .q_a        (PreM_Data102),
     .q_b        ()//Second port is for writing only!
 );
+
+assign NextM1Data102   = AluData102;
+assign NextM4Data102   = AluData102;
+assign NextM555Data102 = AluData102;
+assign M1WrEn102    = M_WrEn102 && (A_Data102[9:0] == 10'd1);
+assign M4WrEn102    = M_WrEn102 && (A_Data102[9:0] == 10'd4);
+assign M555WrEn102  = M_WrEn102 && (A_Data102[9:0] == 10'd555);
+`EN_MSFF(PreM1Data101    , NextM1Data102,    Clock , M1WrEn102)
+`EN_MSFF(PreM4Data101    , NextM4Data102,    Clock , M4WrEn102)
+`EN_MSFF(PreM555Data101  , NextM555Data102,  Clock , M555WrEn102)
+assign M1Data101    = M1WrEn102   ? NextM1Data102   : PreM1Data101;
+assign M4Data101    = M4WrEn102   ? NextM4Data102   : PreM4Data101;
+assign M555Data101  = M555WrEn102 ? NextM555Data102 : PreM555Data101;
+`MSFF(M1Data102    , M1Data101    , Clock)
+`MSFF(M4Data102    , M4Data101    , Clock)
+`MSFF(M555Data102  , M555Data101  , Clock)
+
+
+
 // Sample Ctrl Bits 101 -> 102
 `MSFF(         SelImmAsAluOut102,   SelImmAsAluOut101,  Clock)
 `MSFF(         SelMorA102,         SelMorA101  ,      Clock)
@@ -340,9 +438,9 @@ ram #(.DATA_WIDTH          (16),
 `RST_MSFF(     M_WrEn102   ,        M_WrEn101    ,      Clock , (Reset || RstCtrlJmp103) )
 `RST_VAL_MSFF( JmpCond102  ,        JmpCond101   ,      Clock , (Reset || RstCtrlJmp103) , NO_JMP)
 // Sample Data Path 101 -> 102 
-`MSFF(         A_Data102   , A_Data101     , Clock)
-`MSFF(         D_Data102   , D_Data101     , Clock)
-`MSFF(         Immediate102, Immediate101  , Clock)
+`MSFF(D_Data102    , D_Data101    , Clock)
+`MSFF(A_Data102    , A_Data101    , Clock)
+`MSFF(Immediate102 , Immediate101 , Clock)
 
 
 // ======================================
@@ -370,8 +468,12 @@ assign   AluIn2_102      = SelMorA102 ? M_Data102 : A_Data102;
             .fn(CtrlAluOp102),
             .zero(zero)
         );
-
-assign  AluData102          = SelImmAsAluOut102 ? Immediate102 : PreAluData102;
+assign  Ss8Calc102  = Immediate102 - M1Data102 - M4Data102;
+assign  Ss10Calc102 = Immediate102 - M1Data102 - M4Data102 + M555Data102;
+assign  AluData102          = SelSs8Calc102     ? Ss8Calc102   :
+                              SelSs10Calc102    ? Ss10Calc102  :
+                              SelImmAsAluOut102 ? Immediate102 : 
+                                                  PreAluData102;
 // Jump condition:
 assign  less_than_zero      = AluData102[15];
 assign  greater_than_zero   = !(less_than_zero || zero);
