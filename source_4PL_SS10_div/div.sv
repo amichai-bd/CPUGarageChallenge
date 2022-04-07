@@ -1,3 +1,15 @@
+//-----------------------------------------------------------------------------
+// Title            : Core controller
+// Project          : Intel CPU Garrage challange
+//-----------------------------------------------------------------------------
+// File             : ctrl.sv
+// Original Author  : Amichai Ben-David
+// Created          : 4/2022
+//-----------------------------------------------------------------------------
+// Description :
+// This logic will get the Instruction & Decode acordangly.
+// will set all the relevant Ctrl Bits & triger the Accelerator.
+
 `include "definitions.sv"
 
 module div #( parameter MSB ) (
