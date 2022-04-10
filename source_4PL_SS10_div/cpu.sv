@@ -19,16 +19,7 @@ import cpu_pkg::*;
 (
         input  logic         clk,
         input  logic [3:0]   SW, //Not in Use.
-        input  logic [15:0]  inst_0,
-        input  logic [15:0]  inst_1,
-        input  logic [15:0]  inst_2,
-        input  logic [15:0]  inst_3,
-        input  logic [15:0]  inst_4,
-        input  logic [15:0]  inst_5,
-        input  logic [15:0]  inst_6,
-        input  logic [15:0]  inst_7,
-        input  logic [15:0]  inst_8,
-        input  logic [15:0]  inst_9,
+        input  logic [20:0][15:0]  inst,
         input  logic [15:0]  in_m,
         input  logic         resetN,
         output logic [15:0] out_m,
@@ -71,7 +62,7 @@ logic [15:0] PreM_Data102 , M_Data102   , FwrM_Data103, FwrM_Data104;
 logic [15:0] NextA_Data102, PreA_Data101, A_Data101   , A_Data102     , A_Data103,   A_Data104;
 logic [15:0] AluIn1_102   , AluIn2_102  , AluData102  , PreAluData102 , AluData103 , OutAluData103;
 logic [15:0] Immediate101 , Immediate102, Inst6_101   , Inst8_101;
-logic [9:0]  AccPc        , PC100       , NextPC100;
+logic [9:0]  AccPc        , PC100 , PC101  , NextPC100;
 logic [15:0] Inst0FromAcc101, Inst1FromAcc101;
 logic [15:0] Sequence[19:0];
 logic [15:0] Ss8Calc102, Ss10Calc102;
@@ -94,11 +85,12 @@ assign inst_addr  = {5'b0,PC100};
 // =======================
 assign NextPC100 =  SelPcAcc       ? AccPc           :
                     JmpCondMet102  ? A_Data102[9:0]  :
-                    SelSs8Calc101  ? (PC100 + 10'd7) :
-                    SelSs10Calc101 ? (PC100 + 10'd9) :
+                    SelSs8Calc101  ? (PC100 + 10'd8) :
+                    SelSs10Calc101 ? (PC100 + 10'd10) :
                     SsHit101       ? (PC100 + 10'd2) :
                                      (PC100 + 10'd1) ;
 `RST_MSFF(PC100 , NextPC100, Clock, Reset)
+`RST_MSFF(PC101 , PC100, Clock, Reset)
 
 // ========================
 // === Decode Cycle 101 ===
@@ -106,18 +98,8 @@ assign NextPC100 =  SelPcAcc       ? AccPc           :
 ctrl ctrl (
     .Clk              (Clock),              //input     logic        
     .Reset            (Reset),              //input     logic        
-    .inst_0           (inst_0),             //input     logic [15:0] 
-    .inst_1           (inst_1),             //input     logic [15:0] 
-    .inst_2           (inst_2),             //input     logic [15:0] 
-    .inst_3           (inst_3),             //input     logic [15:0] 
-    .inst_4           (inst_4),             //input     logic [15:0] 
-    .inst_5           (inst_5),             //input     logic [15:0] 
-    .inst_6           (inst_6),             //input     logic [15:0] 
-    .inst_7           (inst_7),             //input     logic [15:0] 
-    .inst_8           (inst_8),             //input     logic [15:0] 
-    .inst_9           (inst_9),             //input     logic [15:0] 
-    .Inst0FromAcc101  (Inst0FromAcc101),    //input     logic [15:0] 
-    .Inst1FromAcc101  (Inst1FromAcc101),    //input     logic [15:0] 
+    .inst             (inst),             //input     logic [15:0] 
+    .InstFromAcc101   ({Inst1FromAcc101,Inst0FromAcc101}),    //input     logic [15:0] 
     .State            (State),              //input     t_state      
     .SelAccInst101    (SelAccInst101),      //input     logic        
     .RstCtrlJmp103    (RstCtrlJmp103),      //input     logic
@@ -179,7 +161,8 @@ assign NextD_Data102 = AluData102;
 `EN_MSFF(PreA_Data101 , NextA_Data102, Clock, A_WrEn102 || A_WrEnImm101)
 `EN_MSFF(PreD_Data101 , NextD_Data102, Clock, D_WrEn102)
 // Forwording unit:
-assign A_Data101    =   SelSs8Calc101  ? Inst6_101       : 
+assign A_Data101    =   A_WrEn102      ? NextA_Data102   :
+                        SelSs8Calc101  ? Inst6_101       : 
                         SelSs10Calc101 ? Inst8_101       :
                         SsHit101       ? Immediate101    : PreA_Data101;
 assign D_Data101    =   D_WrEn102      ? NextD_Data102   : PreD_Data101;
@@ -257,18 +240,22 @@ assign  JmpCondMet102     = (less_than_zero    && JmpCond102[2]) ||
 //RstCtrlJmp103 used to "flush" the pipe when jmp -> Rst the 102 CTRL for 2 cycles. (Sync Reset)
 `RST_MSFF( JmpCondMet103, JmpCondMet102 ,  Clock, Reset)
 assign RstCtrlJmp103 = (JmpCondMet103 || JmpCondMet102) && (State == S_CHECK);
+//RstCtrlJmp103 used to "flush" the pipe when jmp -> Rst the 102 CTRL for 2 cycles. (Sync Reset)
+`RST_MSFF( JmpCondMet103, JmpCondMet102 ,  Clock, Reset)
+assign RstCtrlJmp103 = (JmpCondMet103 || JmpCondMet102) && (State == S_CHECK);
 // Sample Data Path 102 -> 103 (Used for Forwording unit & Hazard on the D_MEM read after Write
-`MSFF(     A_Data103    , A_Data102     , Clock)
+`RST_MSFF(     A_Data103    , A_Data102 , Clock, Reset)
 `MSFF(     FwrM_Data103 , AluData102    , Clock)
 // Local Memory
-`MSFF(     AluData103   , AluData102    , Clock)
-`RST_MSFF( M_WrEn103    , M_WrEn102     , Clock, Reset)
+`RST_MSFF(     AluData103   , AluData102    , Clock, Reset)
+`RST_VAL_MSFF( M_WrEn103    , M_WrEn102     , Clock, Reset, 1'b1)
 // Merror Memory output (for VGA)
 `MSFF(     OutAluData103, AluData102    , Clock)
 `RST_MSFF( OutM_WrEn103 , M_WrEn102     , Clock, Reset)
 // Sample Data Path 103 -> 104 (Used for Forwording unit & Hazard on the D_MEM read after Write
-`MSFF(     A_Data104    , A_Data103     , Clock)
-`MSFF(     FwrM_Data104 , FwrM_Data103  , Clock)
-`RST_MSFF( M_WrEn104    , M_WrEn103     , Clock, Reset)
+`RST_MSFF(     A_Data104    , A_Data103     , Clock, Reset)
+`RST_MSFF(     FwrM_Data104 , FwrM_Data103  , Clock, Reset)
+`RST_VAL_MSFF( M_WrEn104    , M_WrEn103     , Clock, Reset, 1'b1)
 
 endmodule
+
