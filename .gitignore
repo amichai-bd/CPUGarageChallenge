@@ -1,4 +1,3 @@
-modelsi*/
 modelsi*/trk_d_mem_access_no_time.log
 modelsi*/trk_reg_access.log
 modelsi*/vsim.wlf
@@ -16,5 +15,7 @@ modelsim/trk_d_mem_access.log
 modelsim/trk_d_mem_access_no_time.log
 modelsi*/trk_reg_access.log
 modelsi*/vsim.wlf
-modelsi*/work/*
-!modelsi*/work/README.MD
+!modelsi*/work/README.md
+!modelsim/work/README.md
+!modelsim/work/README.md
+!modelsim/work/README
