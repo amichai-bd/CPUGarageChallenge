@@ -240,9 +240,6 @@ assign  JmpCondMet102     = (less_than_zero    && JmpCond102[2]) ||
 //RstCtrlJmp103 used to "flush" the pipe when jmp -> Rst the 102 CTRL for 2 cycles. (Sync Reset)
 `RST_MSFF( JmpCondMet103, JmpCondMet102 ,  Clock, Reset)
 assign RstCtrlJmp103 = (JmpCondMet103 || JmpCondMet102) && (State == S_CHECK);
-//RstCtrlJmp103 used to "flush" the pipe when jmp -> Rst the 102 CTRL for 2 cycles. (Sync Reset)
-`RST_MSFF( JmpCondMet103, JmpCondMet102 ,  Clock, Reset)
-assign RstCtrlJmp103 = (JmpCondMet103 || JmpCondMet102) && (State == S_CHECK);
 // Sample Data Path 102 -> 103 (Used for Forwording unit & Hazard on the D_MEM read after Write
 `RST_MSFF(     A_Data103    , A_Data102 , Clock, Reset)
 `MSFF(     FwrM_Data103 , AluData102    , Clock)
@@ -258,4 +255,3 @@ assign RstCtrlJmp103 = (JmpCondMet103 || JmpCondMet102) && (State == S_CHECK);
 `RST_VAL_MSFF( M_WrEn104    , M_WrEn103     , Clock, Reset, 1'b1)
 
 endmodule
-

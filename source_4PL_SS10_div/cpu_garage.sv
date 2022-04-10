@@ -13,16 +13,7 @@ module cpu_garage(
     logic [DATA_WIDTH-1:0]                 rdata;
     logic resetN;
     //CPU AND ROM
-    logic [INSTR_WIDTH-1:0]                instruction_0;
-    logic [INSTR_WIDTH-1:0]                instruction_1;
-    logic [INSTR_WIDTH-1:0]                instruction_2;
-    logic [INSTR_WIDTH-1:0]                instruction_3;
-    logic [INSTR_WIDTH-1:0]                instruction_4;
-    logic [INSTR_WIDTH-1:0]                instruction_5;
-    logic [INSTR_WIDTH-1:0]                instruction_6;
-    logic [INSTR_WIDTH-1:0]                instruction_7;
-    logic [INSTR_WIDTH-1:0]                instruction_8;
-    logic [INSTR_WIDTH-1:0]                instruction_9;
+    logic [20:0][INSTR_WIDTH-1:0]                instruction;
     logic [DATA_WIDTH-1:0]                 cpu_out_m;
     logic [$clog2(ROM_REGISTER_COUNT)-1:0] inst_address;
     assign resetN = ~Reset;
@@ -31,16 +22,7 @@ logic [4:0] nothing1;
     cpu cpu_inst (
             .clk        (Clk),
             .SW         ('0),
-            .inst_0     (instruction_0),
-            .inst_1     (instruction_1),
-            .inst_2     (instruction_2),
-            .inst_3     (instruction_3),
-            .inst_4     (instruction_4),
-            .inst_5     (instruction_5),
-            .inst_6     (instruction_6),
-            .inst_7     (instruction_7),
-            .inst_8     (instruction_8),
-            .inst_9     (instruction_9),
+            .inst       (instruction),
             .in_m       (rdata),
             .resetN     (resetN),
             .out_m      (cpu_out_m),
@@ -71,7 +53,7 @@ logic [4:0] nothing1;
         (
             .address    (inst_address),
             .clock      (Clk),
-            .q          (instruction_0)
+            .q          (instruction[0])
         );
     rom #(.INSTR_WIDTH          (INSTR_WIDTH),
               .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
@@ -79,7 +61,7 @@ logic [4:0] nothing1;
         (
             .address    (inst_address + 10'd1),
             .clock      (Clk),
-            .q          (instruction_1)
+            .q          (instruction[1])
         );
     rom #(.INSTR_WIDTH          (INSTR_WIDTH),
               .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
@@ -87,7 +69,7 @@ logic [4:0] nothing1;
         (
             .address    (inst_address + 10'd2),
             .clock      (Clk),
-            .q          (instruction_2)
+            .q          (instruction[2])
         );
     rom #(.INSTR_WIDTH          (INSTR_WIDTH),
               .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
@@ -95,7 +77,7 @@ logic [4:0] nothing1;
         (
             .address    (inst_address +10'd3),
             .clock      (Clk),
-            .q          (instruction_3)
+            .q          (instruction[3])
         );
     rom #(.INSTR_WIDTH          (INSTR_WIDTH),
               .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
@@ -103,7 +85,7 @@ logic [4:0] nothing1;
         (
             .address    (inst_address +10'd4),
             .clock      (Clk),
-            .q          (instruction_4)
+            .q          (instruction[4])
         );
 
    rom #(.INSTR_WIDTH          (INSTR_WIDTH),
@@ -112,7 +94,7 @@ logic [4:0] nothing1;
         (
             .address    (inst_address +10'd5),
             .clock      (Clk),
-            .q          (instruction_5)
+            .q          (instruction[5])
         );
 
    rom #(.INSTR_WIDTH          (INSTR_WIDTH),
@@ -121,7 +103,7 @@ logic [4:0] nothing1;
         (
             .address    (inst_address +10'd6),
             .clock      (Clk),
-            .q          (instruction_6)
+            .q          (instruction[6])
         );
 
    rom #(.INSTR_WIDTH          (INSTR_WIDTH),
@@ -130,7 +112,7 @@ logic [4:0] nothing1;
         (
             .address    (inst_address +10'd7),
             .clock      (Clk),
-            .q          (instruction_7)
+            .q          (instruction[7])
         );
 
    rom #(.INSTR_WIDTH          (INSTR_WIDTH),
@@ -139,7 +121,7 @@ logic [4:0] nothing1;
         (
             .address    (inst_address +10'd8),
             .clock      (Clk),
-            .q          (instruction_8)
+            .q          (instruction[8])
         );
     
    rom #(.INSTR_WIDTH          (INSTR_WIDTH),
@@ -148,8 +130,101 @@ logic [4:0] nothing1;
         (
             .address    (inst_address +10'd9),
             .clock      (Clk),
-            .q          (instruction_9)
+            .q          (instruction[9])
+        );
+    rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_10
+        (
+            .address    (inst_address + 10'd10),
+            .clock      (Clk),
+            .q          (instruction[10])
+        );
+    rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_11
+        (
+            .address    (inst_address + 10'd11),
+            .clock      (Clk),
+            .q          (instruction[11])
+        );
+    rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_12
+        (
+            .address    (inst_address + 10'd12),
+            .clock      (Clk),
+            .q          (instruction[12])
+        );
+    rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_13
+        (
+            .address    (inst_address +10'd13),
+            .clock      (Clk),
+            .q          (instruction[13])
+        );
+    rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_14
+        (
+            .address    (inst_address +10'd14),
+            .clock      (Clk),
+            .q          (instruction[14])
         );
 
+   rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_15
+        (
+            .address    (inst_address +10'd15),
+            .clock      (Clk),
+            .q          (instruction[15])
+        );
+
+   rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_16
+        (
+            .address    (inst_address +10'd16),
+            .clock      (Clk),
+            .q          (instruction[16])
+        );
+
+   rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_17
+        (
+            .address    (inst_address +10'd17),
+            .clock      (Clk),
+            .q          (instruction[17])
+        );
+
+   rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_18
+        (
+            .address    (inst_address +10'd18),
+            .clock      (Clk),
+            .q          (instruction[18])
+        );
+    
+   rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_19
+        (
+            .address    (inst_address +10'd19),
+            .clock      (Clk),
+            .q          (instruction[19])
+        );
+
+   rom #(.INSTR_WIDTH          (INSTR_WIDTH),
+              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
+        rom_inst_20
+        (
+            .address    (inst_address +10'd20),
+            .clock      (Clk),
+            .q          (instruction[20])
+        );
 endmodule
 

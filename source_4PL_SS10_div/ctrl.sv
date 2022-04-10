@@ -17,18 +17,8 @@ import cpu_pkg::*;
 (
     input     logic        Clk,
     input     logic        Reset,
-    input     logic [15:0] inst_0,
-    input     logic [15:0] inst_1,
-    input     logic [15:0] inst_2,
-    input     logic [15:0] inst_3,
-    input     logic [15:0] inst_4,
-    input     logic [15:0] inst_5,
-    input     logic [15:0] inst_6,
-    input     logic [15:0] inst_7,
-    input     logic [15:0] inst_8,
-    input     logic [15:0] inst_9,
-    input     logic [15:0] Inst0FromAcc101,
-    input     logic [15:0] Inst1FromAcc101,
+    input     logic [20:0][15:0] inst,
+    input     logic [1:0] [15:0] InstFromAcc101,
     input   t_state        State,
     input     logic        SelAccInst101,
     input     logic        RstCtrlJmp103,
@@ -54,11 +44,9 @@ import cpu_pkg::*;
     output    logic        SelImmAsAluOut102
 );
 // -- ctrl bits --
-logic [15:0]Inst0_101,Inst1_101;
+logic [9:0] [15:0]Inst101;
 logic       JmpSSHit101, JmpSSHit102;
 logic       SsHit102 ;
-logic [15:0] Inst2_101, Inst3_101, Inst4_101;
-logic [15:0] Inst5_101, Inst7_101, Inst9_101;
 logic       M_WrEn101, D_WrEn101, A_WrEn101;
 t_jmp_cond  JmpCond101;
 logic [5:0] CtrlAluOp101 ;
@@ -79,58 +67,58 @@ logic       SelImmAsAluOut101;
 logic [23:0] [15:0] History;
 t_inst_type InstType101;
 
-assign Inst0_101  = SelAccInst101   ? Inst0FromAcc101: 
-                    JmpSSHit102     ? '0             :
-                    SsHit102        ? inst_1         : 
-                                      inst_0         ;
-assign Inst1_101  = SelAccInst101   ? Inst1FromAcc101: 
-                    JmpSSHit102     ? '0             :
-                    SsHit102        ? inst_2         :
-                                      inst_1         ;
-assign Inst2_101  = inst_2;
-assign Inst3_101  = inst_3;
-assign Inst4_101  = inst_4;
-assign Inst5_101  = inst_5;
-assign Inst6_101  = inst_6;
-assign Inst7_101  = inst_7;
-assign Inst8_101  = inst_8;
-assign Inst9_101  = inst_9;
+logic [20:0] [15:0] LocalInstFromAcc101;
 always_comb begin
-    InstType101  = (Inst0_101[15] == 1'b0) ? A_TYPE : C_TYPE; // (Inst0_101[15:13] == 3'b111) -> C_TYPE
-    M_WrEn101    = (InstType101 == C_TYPE) && Inst0_101[3];
-    D_WrEn101    = (InstType101 == C_TYPE) && Inst0_101[4];
-    A_WrEn101    = (InstType101 == C_TYPE) && Inst0_101[5];
+   LocalInstFromAcc101 = '0;
+   LocalInstFromAcc101[1:0] = InstFromAcc101[1:0];
+end
+always_comb begin
+    for(int i =0 ; i<10  ; i++) begin
+        Inst101[i]  = SelAccInst101   ? LocalInstFromAcc101[i]: 
+                      SelSs10Calc102  ? inst[9+i]        :
+                      SelSs8Calc102   ? inst[7+i]        :
+                      SsHit102        ? inst[1+i]        : 
+                                        inst[0+i]        ;
+    end
+end
+assign Inst6_101   = Inst101[6];
+assign Inst8_101   = Inst101[8];
+always_comb begin
+    InstType101  = (Inst101[0][15] == 1'b0) ? A_TYPE : C_TYPE; // (Inst101[0][15:13] == 3'b111) -> C_TYPE
+    M_WrEn101    = (InstType101 == C_TYPE) && Inst101[0][3];
+    D_WrEn101    = (InstType101 == C_TYPE) && Inst101[0][4];
+    A_WrEn101    = (InstType101 == C_TYPE) && Inst101[0][5];
     A_WrEnImm101 = (InstType101 == A_TYPE);
-    JmpCond101   = (InstType101 == C_TYPE) ? t_jmp_cond'(Inst0_101[2:0]) : NO_JMP;// Cast enum if C_TYPE.
+    JmpCond101   = (InstType101 == C_TYPE) ? t_jmp_cond'(Inst101[0][2:0]) : NO_JMP;// Cast enum if C_TYPE.
     SelAType101  = (InstType101 == A_TYPE);
-    CtrlAluOp101 = Inst0_101[11:6];  // See Spec for details. Inst0_101[11:6] = Operation.
-    SelMorA101   = Inst0_101[12];    // See Spec for details. Inst0_101[12] = A_vs_M.
-    LoadDfromA101        = (Inst0_101[15] == 1'b0) && (Inst1_101 == 16'b1110110000010000); // "@xxx" && "D = A"
-    LoadMfromD101        = (Inst0_101[15] == 1'b0) && (Inst1_101 == 16'b1110001100001000); // "@xxx" && "M = D"
-    LoadDfromM101        = (Inst0_101[15] == 1'b0) && (Inst1_101 == 16'b1111110000010000); // "@xxx" && "D = M"
-    LoadDfromDminusM101  = (Inst0_101[15] == 1'b0) && (Inst1_101 == 16'b1111010011010000); // "@xxx" && "D = D - M"
-    LoadDfromDplusM101   = (Inst0_101[15] == 1'b0) && (Inst1_101 == 16'b1111000010010000); // "@xxx" && "D = D + M"
-    LoadMfromMplusOne101 = (Inst0_101[15] == 1'b0) && (Inst1_101 == 16'b1111110111001000); // "@xxx" && "M = M + 1"
+    CtrlAluOp101 = Inst101[0][11:6];  // See Spec for details. Inst101[0][11:6] = Operation.
+    SelMorA101   = Inst101[0][12];    // See Spec for details. Inst101[0][12] = A_vs_M.
+    LoadDfromA101        = (Inst101[0][15] == 1'b0) && (Inst101[1] == 16'b1110110000010000); // "@xxx" && "D = A"
+    LoadMfromD101        = (Inst101[0][15] == 1'b0) && (Inst101[1] == 16'b1110001100001000); // "@xxx" && "M = D"
+    LoadDfromM101        = (Inst101[0][15] == 1'b0) && (Inst101[1] == 16'b1111110000010000); // "@xxx" && "D = M"
+    LoadDfromDminusM101  = (Inst101[0][15] == 1'b0) && (Inst101[1] == 16'b1111010011010000); // "@xxx" && "D = D - M"
+    LoadDfromDplusM101   = (Inst101[0][15] == 1'b0) && (Inst101[1] == 16'b1111000010010000); // "@xxx" && "D = D + M"
+    LoadMfromMplusOne101 = (Inst101[0][15] == 1'b0) && (Inst101[1] == 16'b1111110111001000); // "@xxx" && "M = M + 1"
     
-    PreLoadDM_ImmMinuseMinuseM =  (Inst0_101[15] == 1'b0                ) && // @XXX
-                                  (Inst1_101     == 16'b1110110000010000) && // D = A
-                                  (Inst2_101     == 16'b0000000000000001) && // @1
-                                  (Inst3_101     == 16'b1111010011010000) && // D = D - M
-                                  (Inst4_101     == 16'b0000000000000100) && // @4
-                                  (Inst5_101     == 16'b1111010011010000) && // D = D - M
-                                  (Inst6_101[15] == 1'b0                ) && // @XXX
-                                  (Inst7_101     == 16'b1110001100001000) ;  // M = D
+    PreLoadDM_ImmMinuseMinuseM =  (Inst101[0][15] == 1'b0                ) && // @XXX
+                                  (Inst101[1]     == 16'b1110110000010000) && // D = A
+                                  (Inst101[2]     == 16'b0000000000000001) && // @1
+                                  (Inst101[3]     == 16'b1111010011010000) && // D = D - M
+                                  (Inst101[4]     == 16'b0000000000000100) && // @4
+                                  (Inst101[5]     == 16'b1111010011010000) && // D = D - M
+                                  (Inst101[6][15] == 1'b0                ) && // @XXX
+                                  (Inst101[7]     == 16'b1110001100001000) ;  // M = D
 
-    PreLoadDM_ImmMinuseMinusePlusM =(Inst0_101[15] == 1'b0                ) && // @XXX
-                                    (Inst1_101     == 16'b1110110000010000) && // D = A
-                                    (Inst2_101     == 16'b0000000000000001) && // @1
-                                    (Inst3_101     == 16'b1111010011010000) && // D = D - M
-                                    (Inst4_101     == 16'b0000000000000100) && // @4
-                                    (Inst5_101     == 16'b1111010011010000) && // D = D - M
-                                    (Inst6_101     == 16'b0000001000101011) && // @555
-                                    (Inst7_101     == 16'b1111000010010000) && // D = D + M
-                                    (Inst8_101[15] == 1'b0                ) && // @XXX
-                                    (Inst9_101     == 16'b1110001100001000) ; // M = D
+    PreLoadDM_ImmMinuseMinusePlusM =(Inst101[0][15] == 1'b0                ) && // @XXX
+                                    (Inst101[1]     == 16'b1110110000010000) && // D = A
+                                    (Inst101[2]     == 16'b0000000000000001) && // @1
+                                    (Inst101[3]     == 16'b1111010011010000) && // D = D - M
+                                    (Inst101[4]     == 16'b0000000000000100) && // @4
+                                    (Inst101[5]     == 16'b1111010011010000) && // D = D - M
+                                    (Inst101[6]     == 16'b0000001000101011) && // @555
+                                    (Inst101[7]     == 16'b1111000010010000) && // D = D + M
+                                    (Inst101[8][15] == 1'b0                ) && // @XXX
+                                    (Inst101[9]     == 16'b1110001100001000) ; // M = D
 
     LoadDM_ImmMinuseMinuseM       = PreLoadDM_ImmMinuseMinuseM       && (State == S_CHECK);
     LoadDM_ImmMinuseMinusePlusM   = PreLoadDM_ImmMinuseMinusePlusM   && (State == S_CHECK);
@@ -141,7 +129,7 @@ always_comb begin
     SsHit101 = (LoadDfromA101       || LoadMfromD101      || LoadDfromM101  || 
                 LoadDfromDminusM101 || LoadDfromDplusM101 || LoadMfromMplusOne101) 
                 && (!RstCtrlJmp103);
-    Immediate101 = Inst0_101;
+    Immediate101 = Inst101[0];
     SelImmAsAluOut101     = 1'b0;   //default
     if(LoadDfromA101) begin         // "@xxx" && "D = A"
         D_WrEn101         = 1'b1;
@@ -187,8 +175,8 @@ end// always_comb
 // ========================================================================
 // === accelerator to detect & calc the Quation && Remainder             ===
 // ========================================================================
-assign History[0] = Inst1_101;
-assign History[1] = Inst0_101;
+assign History[0] = Inst101[1];
+assign History[1] = Inst101[0];
 `EN_RST_MSFF(History[23:2] , History[21:0], Clk, (State == S_CHECK), Reset) //Shift 2 every Cycle
 assign MatchP1Div101 =  (History[23]     == 16'b00) && (History[22] == 16'b1110110000010000) && //D     = 0             | (LIP) @0  , D = A
                         (History[21]     == 16'b01) && (History[20] == 16'b1110001100001000) && //M[X1] = D  | Quation  | @1        , M = D

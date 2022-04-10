@@ -1,0 +1,263 @@
+m255
+K4
+z2
+!s11f MIXED_VERSIONS
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/Amichaib/OneDrive - Intel Corporation/Desktop/my_git_hub/CPUGarageChallenge/abd_modelsim
+vacc_machine
+Z1 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
+Z2 DXx4 work 7 cpu_pkg 0 22 LRLdeHCogWT2OJJ;?]3Ik1
+Z3 !s110 1649598267
+!i10b 1
+!s100 ekR>SQRiCFa<ce;6=OTT90
+Z4 !s11b Dg1SIo80bB@j0V0VzS_@n1
+IMEJ2AomW5^0nAMh2lM5mE1
+Z5 VDg1SIo80bB@j0V0VzS_@n1
+S1
+R0
+w1649373834
+8../source_4PL_SS10_div/acc_machine.sv
+F../source_4PL_SS10_div/acc_machine.sv
+!i122 8
+L0 13 86
+Z6 OV;L;2020.1;71
+r1
+!s85 0
+31
+Z7 !s108 1649598267.000000
+!s107 ../source//definitions.sv|../source_4PL_SS10_div/cpu_garage_tb.sv|../source_4PL_SS10_div/ctrl.sv|../source_4PL_SS10_div/acc_machine.sv|../source_4PL_SS10_div/cpu_garage.sv|../source/rom.sv|../source/ram.sv|../source/definitions.sv|../source_4PL_SS10_div/div.sv|../source_4PL_SS10_div/cpu.sv|../source/alu.sv|../source_4PL_SS10_div/cpu_pkg.sv|
+Z8 !s90 -f|cpu_garage_list.f|
+!i113 1
+Z9 !s92 +incdir+../source/
+Z10 tCvgOpt 0
+valu
+R1
+R3
+!i10b 1
+!s100 K^b20XhV=Xl;^FfeTd:]W0
+R4
+I]Bf?bFczVB[4dnnD1z1Oa0
+R5
+S1
+R0
+Z11 w1649594636
+8../source/alu.sv
+F../source/alu.sv
+!i122 8
+L0 2 32
+R6
+r1
+!s85 0
+31
+R7
+Z12 !s107 ../source//definitions.sv|../source_4PL_SS10_div/cpu_garage_tb.sv|../source_4PL_SS10_div/ctrl.sv|../source_4PL_SS10_div/acc_machine.sv|../source_4PL_SS10_div/cpu_garage.sv|../source/rom.sv|../source/ram.sv|../source/definitions.sv|../source_4PL_SS10_div/div.sv|../source_4PL_SS10_div/cpu.sv|../source/alu.sv|../source_4PL_SS10_div/cpu_pkg.sv|
+R8
+!i113 1
+R9
+R10
+vcpu
+R1
+R2
+R3
+!i10b 1
+!s100 ^YWh25kkCYi=UJcHg=T?F1
+R4
+I9Yk4llI7nYJYMA<VkcoP^0
+R5
+S1
+R0
+w1649537399
+8../source_4PL_SS10_div/cpu.sv
+F../source_4PL_SS10_div/cpu.sv
+!i122 8
+L0 17 241
+R6
+r1
+!s85 0
+31
+R7
+R12
+R8
+!i113 1
+R9
+R10
+vcpu_garage
+R1
+R3
+!i10b 1
+!s100 n<@mPIkTC1MdgeHSaZMQ70
+R4
+IA]LdU9lW`co[BbB]Z=?iF3
+R5
+S1
+R0
+w1649595631
+8../source_4PL_SS10_div/cpu_garage.sv
+F../source_4PL_SS10_div/cpu_garage.sv
+!i122 8
+L0 3 227
+R6
+r1
+!s85 0
+31
+R7
+R12
+R8
+!i113 1
+R9
+R10
+vcpu_garage_tb
+R1
+R3
+!i10b 1
+!s100 IH2LX:>GeIDhIkg9_l9lU3
+R4
+IA5lb`BCe]4AVIdi=MdHI90
+R5
+S1
+R0
+w1649595431
+8../source_4PL_SS10_div/cpu_garage_tb.sv
+F../source_4PL_SS10_div/cpu_garage_tb.sv
+!i122 8
+L0 1 91
+R6
+r1
+!s85 0
+31
+R7
+R12
+R8
+!i113 1
+R9
+R10
+Xcpu_pkg
+R1
+R3
+!i10b 1
+!s100 KbQXc<b^2fd>8LI1QC6kc3
+R4
+ILRLdeHCogWT2OJJ;?]3Ik1
+VLRLdeHCogWT2OJJ;?]3Ik1
+S1
+R0
+w1649364791
+8../source_4PL_SS10_div/cpu_pkg.sv
+F../source_4PL_SS10_div/cpu_pkg.sv
+!i122 8
+L0 3 0
+R6
+r1
+!s85 0
+31
+R7
+R12
+R8
+!i113 1
+R9
+R10
+vctrl
+R1
+R2
+R3
+!i10b 1
+!s100 ?GJ[hO>l2efJ?37_nF?=m1
+R4
+I@lYPSm`6kUSj3<zG[_9;B1
+R5
+S1
+R0
+w1649534662
+8../source_4PL_SS10_div/ctrl.sv
+F../source_4PL_SS10_div/ctrl.sv
+!i122 8
+L0 15 200
+R6
+r1
+!s85 0
+31
+R7
+R12
+R8
+!i113 1
+R9
+R10
+vdiv
+R1
+R3
+!i10b 1
+!s100 17COVdVXE>SkZMz3;5PSB3
+R4
+I[[RVX6Y107759^oJmgED21
+R5
+S1
+R0
+w1649374254
+8../source_4PL_SS10_div/div.sv
+F../source_4PL_SS10_div/div.sv
+!i122 8
+L0 15 57
+R6
+r1
+!s85 0
+31
+R7
+R12
+R8
+!i113 1
+R9
+R10
+vram
+R1
+R3
+!i10b 1
+!s100 f0d62j^2n?jZ=:b:N`_Om2
+R4
+IS>[Y4dX;Y01f3PXfG0_o>1
+R5
+S1
+R0
+R11
+8../source/ram.sv
+F../source/ram.sv
+!i122 8
+L0 3 43
+R6
+r1
+!s85 0
+31
+R7
+R12
+R8
+!i113 1
+R9
+R10
+vrom
+R1
+R3
+!i10b 1
+!s100 LGM2UT?m[m6Wa>iH7o0V31
+R4
+IXN5@<2CJz[WBVg339gbBQ2
+R5
+S1
+R0
+R11
+8../source/rom.sv
+F../source/rom.sv
+!i122 8
+L0 2 25
+R6
+r1
+!s85 0
+31
+R7
+R12
+R8
+!i113 1
+R9
+R10

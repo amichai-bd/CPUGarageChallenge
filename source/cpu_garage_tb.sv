@@ -18,10 +18,10 @@ end: reset_gen
 logic  [15:0] IMem [1023:0];
 initial begin: test_seq
 #1
-    //$readmemb({"../hack/rom.sv"}, IMem);
-    $readmemh({"../hack/rom2.sv"}, IMem);
+    $readmemb({"../hack/rom.sv"}, IMem);
+    //$readmemh({"../hack/rom2.sv"}, IMem);
     force cpu_garage_tb.cpu_garage.rom_inst.mem = IMem; //XMR - cross module reference
-    #10_000_000 $finish;
+    #100_000 $finish;
 end: test_seq
 
 //Instantiating

@@ -17,7 +17,7 @@ end: reset_gen
 
 logic  [15:0] IMem [1023:0];
 initial begin: test_seq
-#1
+    IMem = '{default:0};
     $readmemb({"../hack/rom.sv"}, IMem);
     force cpu_garage_tb.cpu_garage.rom_inst_0.mem = IMem; //XMR - cross module reference
     force cpu_garage_tb.cpu_garage.rom_inst_1.mem = IMem; //XMR - cross module reference
@@ -29,7 +29,19 @@ initial begin: test_seq
     force cpu_garage_tb.cpu_garage.rom_inst_7.mem = IMem; //XMR - cross module reference
     force cpu_garage_tb.cpu_garage.rom_inst_8.mem = IMem; //XMR - cross module reference
     force cpu_garage_tb.cpu_garage.rom_inst_9.mem = IMem; //XMR - cross module reference
-    #100000 $finish;
+    force cpu_garage_tb.cpu_garage.rom_inst_10.mem = IMem; //XMR - cross module reference
+    force cpu_garage_tb.cpu_garage.rom_inst_11.mem = IMem; //XMR - cross module reference
+    force cpu_garage_tb.cpu_garage.rom_inst_12.mem = IMem; //XMR - cross module reference
+    force cpu_garage_tb.cpu_garage.rom_inst_13.mem = IMem; //XMR - cross module reference
+    force cpu_garage_tb.cpu_garage.rom_inst_14.mem = IMem; //XMR - cross module reference
+    force cpu_garage_tb.cpu_garage.rom_inst_15.mem = IMem; //XMR - cross module reference
+    force cpu_garage_tb.cpu_garage.rom_inst_16.mem = IMem; //XMR - cross module reference
+    force cpu_garage_tb.cpu_garage.rom_inst_17.mem = IMem; //XMR - cross module reference
+    force cpu_garage_tb.cpu_garage.rom_inst_18.mem = IMem; //XMR - cross module reference
+    force cpu_garage_tb.cpu_garage.rom_inst_19.mem = IMem; //XMR - cross module reference
+    force cpu_garage_tb.cpu_garage.rom_inst_20.mem = IMem; //XMR - cross module reference
+
+    #100_000 $finish;
 end: test_seq
 
 //Instantiating
@@ -43,7 +55,7 @@ integer trk_d_mem_access;
 integer trk_reg_access;
 integer trk_d_mem_access_no_time;
 initial begin
-    trk_d_mem_access      = $fopen({"trk_d_mem_access.log"},"w");
+    trk_d_mem_access    = $fopen({"trk_d_mem_access.log"},"w");
     trk_reg_access      = $fopen({"trk_reg_access.log"},"w");
     trk_d_mem_access_no_time      = $fopen({"trk_d_mem_access_no_time.log"},"w");
     $fwrite(trk_d_mem_access,"-----------------------------------------------------\n");
