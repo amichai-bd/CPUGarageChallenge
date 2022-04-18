@@ -8,6 +8,7 @@ FPGA_CPUGarage/sv/*.bak
 FPGA_CPUGarage/*/*.bak
 modelsim/vsim.wlf
 modelsim/transcript
+FPGA_CPUGarage/db/CPU_GARAGE*.flock
 FPGA_CPUGarage/output_files/*
 FPGA_CPUGarage/CPU_GARAGE.qws 
 FPGA_CPUGarage/db/CPU_GARAGE.asm.qmsg
