@@ -4,25 +4,68 @@ modelsim/work/_*.qdb
 modelsim/work/_*.qpg
 modelsim/work/_*.qtl
 modelsim/work/_*
+FPGA_CPUGarage/sv/*.bak
+FPGA_CPUGarage/*/*.bak
 modelsim/vsim.wlf
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.asm_labs.ddb
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.db_info
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.fit.qmsg
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.hier_info
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.hif
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.lpc.html
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.lpc.txt
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.map.kpt
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.map.qmsg
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.sta.qmsg
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.sta_cmp.7_slow_1200mv_85c.tdb
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.fast_1200mv_0c.ddb
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.fastest_slow_1200mv_0c.ddb
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.fastest_slow_1200mv_85c.ddb
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.slow_1200mv_0c.ddb
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.slow_1200mv_85c.ddb
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.tmw_info
-rm -rf FPGA_CPUGarage/db/CPU_GARAGE.vpr.ammdb
+modelsim/transcript
+FPGA_CPUGarage/output_files/*
+FPGA_CPUGarage/db/CPU_GARAGE.asm.qmsg
+FPGA_CPUGarage/db/CPU_GARAGE.restore.qmsg
+FPGA_CPUGarage/db/CPU_GARAGE.sld_design_entry_dsc.sci
+FPGA_CPUGarage/db/CPU_GARAGE.asm.qmsg
+FPGA_CPUGarage/db/CPU_GARAGE.restore.qmsg
+FPGA_CPUGarage/db/CPU_GARAGE.sld_design_entry_dsc.sci
+FPGA_CPUGarage/db/ip/slda41778d5/alt_sld_fab.qip
+FPGA_CPUGarage/db/ip/slda41778d5/alt_sld_fab.sopcinfo
+FPGA_CPUGarage/db/ip/slda41778d5/alt_sld_fab.v
+FPGA_CPUGarage/db/ip/slda41778d5/alt_sld_fab__report.html
+FPGA_CPUGarage/db/ip/slda41778d5/alt_sld_fab__report.xml
+FPGA_CPUGarage/db/ip/slda41778d5/alt_sld_fab_wrapper_hw.tcl
+FPGA_CPUGarage/db/ip/slda41778d5/submodules/alt_sld_fab_alt_sld_fab.v
+FPGA_CPUGarage/db/ip/slda41778d5/submodules/alt_sld_fab_alt_sld_fab_ident.sv
+FPGA_CPUGarage/db/ip/slda41778d5/submodules/alt_sld_fab_alt_sld_fab_presplit.sv
+FPGA_CPUGarage/db/ip/slda41778d5/submodules/alt_sld_fab_alt_sld_fab_sldfabric.vhd
+FPGA_CPUGarage/db/ip/slda41778d5/submodules/alt_sld_fab_alt_sld_fab_splitter.sv
+FPGA_CPUGarage/db/prev_cmp_CPU_Garage.qmsg
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.autoh_e40e1.cmp.ammdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.autoh_e40e1.cmp.cdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.autoh_e40e1.cmp.hdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.autoh_e40e1.cmp.rcfdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.autoh_e40e1.map.cdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.autoh_e40e1.map.dpi
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.autoh_e40e1.map.hdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.autoh_e40e1.map.kpt
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.root_partition.cmp.ammdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.root_partition.cmp.cdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.root_partition.cmp.hdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.root_partition.cmp.rcfdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.root_partition.map.cdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.root_partition.map.dpi
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.root_partition.map.hbdb.cdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.root_partition.map.hbdb.hb_info
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.root_partition.map.hbdb.hdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.root_partition.map.hdb
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.root_partition.map.kpt
+FPGA_CPUGarage/incremental_db/compiled_partitions/CPU_GARAGE.rrp.hdb
+
+FPGA_CPUGarage/db/CPU_GARAGE.asm_labs.ddb
+FPGA_CPUGarage/db/CPU_GARAGE.db_info
+FPGA_CPUGarage/db/CPU_GARAGE.fit.qmsg
+FPGA_CPUGarage/db/CPU_GARAGE.hier_info
+FPGA_CPUGarage/db/CPU_GARAGE.hif
+FPGA_CPUGarage/db/CPU_GARAGE.lpc.html
+FPGA_CPUGarage/db/CPU_GARAGE.lpc.txt
+FPGA_CPUGarage/db/CPU_GARAGE.map.kpt
+FPGA_CPUGarage/db/CPU_GARAGE.map.qmsg
+FPGA_CPUGarage/db/CPU_GARAGE.sta.qmsg
+FPGA_CPUGarage/db/CPU_GARAGE.sta_cmp.7_slow_1200mv_85c.tdb
+FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.fast_1200mv_0c.ddb
+FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.fastest_slow_1200mv_0c.ddb
+FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.fastest_slow_1200mv_85c.ddb
+FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.slow_1200mv_0c.ddb
+FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.slow_1200mv_85c.ddb
+FPGA_CPUGarage/db/CPU_GARAGE.tmw_info
+FPGA_CPUGarage/db/CPU_GARAGE.vpr.ammdb
 FPGA_CPUGarage/db/CPU_GARAGE.*.rdb
 FPGA_CPUGarage/db/CPU_GARAGE.*.bpm
 FPGA_CPUGarage/db/CPU_GARAGE.*.cdb
