@@ -28,5 +28,8 @@ typedef enum logic [3:0] {
     S_DIV     = 4'b1000
 } t_state;
 
+parameter   BYPASS_DIV = 1;
+parameter   DIV_ACC = 1;
+
 
 endpackage

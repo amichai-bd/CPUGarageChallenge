@@ -4,7 +4,7 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(10M50DAF484) Path("C:/Users/Amichaib/OneDrive - Intel Corporation/Desktop/my_git_hub/CPUGarageChallenge/FPGA_CPUGarage_1_restored/output_files/") File("CPU_GARAGE.sof") MfrSpec(OpMask(1));
+		Device PartName(10M50DAF484) Path("C:/Users/Amichaib/OneDrive - Intel Corporation/Desktop/my_git_hub/CPUGarageChallenge/FPGA_CPUGarage/output_files/") File("CPU_GARAGE.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 

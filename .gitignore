@@ -1,21 +1,42 @@
-modelsi*/trk_d_mem_access_no_time.log
-modelsi*/trk_reg_access.log
-modelsi*/vsim.wlf
-modelsi*/wlft6rynxs
-modelsi*/wlft9z2tj7
-modelsi*/wlftdit2jg
-modelsi*/wlftidc65b
-modelsi*/wlftjwg7tf
-modelsi*/wlfttt3qr2
-modelsi*/transcript
-modelsim/transcript
-modelsi*/trk_d_mem_access.log
-modelsi*/trk_d_mem_access_no_time.log
-modelsim/trk_d_mem_access.log
-modelsim/trk_d_mem_access_no_time.log
-modelsi*/trk_reg_access.log
-modelsi*/vsim.wlf
-!modelsi*/work/README.md
-!modelsim/work/README.md
-!modelsim/work/README.md
-!modelsim/work/README
+modelsim/work/_info
+modelsim/work/_lib.qdb
+modelsim/work/_*.qdb
+modelsim/work/_*.qpg
+modelsim/work/_*.qtl
+modelsim/work/_*
+modelsim/vsim.wlf
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.asm_labs.ddb
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.db_info
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.fit.qmsg
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.hier_info
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.hif
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.lpc.html
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.lpc.txt
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.map.kpt
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.map.qmsg
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.sta.qmsg
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.sta_cmp.7_slow_1200mv_85c.tdb
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.fast_1200mv_0c.ddb
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.fastest_slow_1200mv_0c.ddb
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.fastest_slow_1200mv_85c.ddb
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.slow_1200mv_0c.ddb
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.tiscmp.slow_1200mv_85c.ddb
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.tmw_info
+rm -rf FPGA_CPUGarage/db/CPU_GARAGE.vpr.ammdb
+FPGA_CPUGarage/db/CPU_GARAGE.*.rdb
+FPGA_CPUGarage/db/CPU_GARAGE.*.bpm
+FPGA_CPUGarage/db/CPU_GARAGE.*.cdb
+FPGA_CPUGarage/db/CPU_GARAGE.*.hdb
+FPGA_CPUGarage/db/CPU_GARAGE.*.idb
+FPGA_CPUGarage/db/CPU_GARAGE.*.rdb
+FPGA_CPUGarage/db/CPU_GARAGE.*.ddb
+FPGA_CPUGarage/db/CPU_GARAGE.*.ddb
+FPGA_CPUGarage/db/CPU_GARAGE.*_info
+FPGA_CPUGarage/db/CPU_GARAGE.*.qmsg
+FPGA_CPUGarage/db/CPU_GARAGE.hif
+FPGA_CPUGarage/db/CPU_GARAGE.lpc.*
+FPGA_CPUGarage/db/CPU_GARAGE.map.*
+FPGA_CPUGarage/db/CPU_GARAGE.sta.*
+FPGA_CPUGarage/db/CPU_GARAGE.sta*
+FPGA_CPUGarage/db/CPU_GARAGE.*.ddb
+FPGA_CPUGarage/db/CPU_GARAGE.*.amm*

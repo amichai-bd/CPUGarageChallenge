@@ -66,7 +66,6 @@ logic       MatchP1Div102, MatchP2Div102, MatchP3Div102, MatchP4Div102;
 logic       SelImmAsAluOut101;
 logic [23:0] [15:0] History;
 t_inst_type InstType101;
-localparam      DIV_ACC = 0;
 
 
 logic [20:0] [15:0] LocalInstFromAcc101;

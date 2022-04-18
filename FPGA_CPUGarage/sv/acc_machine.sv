@@ -33,7 +33,6 @@ logic    BypassDivMatch, PreBypassDivMatch, SetBypassDivMatch;
 t_state  NextState;
 logic    EnAccPc;
 logic [9:0] NextAccPc;
-localparam      BYPASS_DIV = 0;
 
 always_comb begin
    if(BYPASS_DIV == 1) SetBypassDivMatch = (Divident == 16'd20000) && (Divisor == 16'd10);
