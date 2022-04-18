@@ -13,7 +13,7 @@ module cpu_garage(
     logic [DATA_WIDTH-1:0]                 rdata;
     logic resetN;
     //CPU AND ROM
-    logic [20:0][INSTR_WIDTH-1:0]                instruction;
+    logic [19:0][INSTR_WIDTH-1:0]          instruction;
     logic [DATA_WIDTH-1:0]                 cpu_out_m;
     logic [$clog2(ROM_REGISTER_COUNT)-1:0] inst_address;
     assign resetN = ~Reset;
@@ -216,15 +216,6 @@ logic [4:0] nothing1;
             .address    (inst_address +10'd19),
             .clock      (Clk),
             .q          (instruction[19])
-        );
-
-   rom #(.INSTR_WIDTH          (INSTR_WIDTH),
-              .ROM_REGISTER_COUNT   (ROM_REGISTER_COUNT))
-        rom_inst_20
-        (
-            .address    (inst_address +10'd20),
-            .clock      (Clk),
-            .q          (instruction[20])
         );
 endmodule
 

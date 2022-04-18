@@ -19,7 +19,7 @@ import cpu_pkg::*;
 (
         input  logic         clk,
         input  logic [3:0]   SW, //Not in Use.
-        input  logic [20:0][15:0]  inst,
+        input  logic [19:0][15:0]  inst,
         input  logic [15:0]  in_m,
         input  logic         resetN,
         output logic [15:0] out_m,
@@ -62,7 +62,7 @@ logic [15:0] PreM_Data102 , M_Data102   , FwrM_Data103, FwrM_Data104;
 logic [15:0] NextA_Data102, PreA_Data101, A_Data101   , A_Data102     , A_Data103,   A_Data104;
 logic [15:0] AluIn1_102   , AluIn2_102  , AluData102  , PreAluData102 , AluData103 , OutAluData103;
 logic [15:0] Immediate101 , Immediate102, Inst6_101   , Inst8_101;
-logic [9:0]  AccPc        , PC100 , PC101  , NextPC100;
+logic [9:0]  AccPc        , PC100 , NextPC100;
 logic [15:0] Inst0FromAcc101, Inst1FromAcc101;
 logic [15:0] Sequence[19:0];
 logic [15:0] Ss8Calc102, Ss10Calc102;
@@ -90,7 +90,6 @@ assign NextPC100 =  SelPcAcc       ? AccPc           :
                     SsHit101       ? (PC100 + 10'd2) :
                                      (PC100 + 10'd1) ;
 `RST_MSFF(PC100 , NextPC100, Clock, Reset)
-`RST_MSFF(PC101 , PC100, Clock, Reset)
 
 // ========================
 // === Decode Cycle 101 ===

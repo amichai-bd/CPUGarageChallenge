@@ -17,7 +17,7 @@ import cpu_pkg::*;
 (
     input     logic        Clk,
     input     logic        Reset,
-    input     logic [20:0][15:0] inst,
+    input     logic [19:0][15:0] inst,
     input     logic [1:0] [15:0] InstFromAcc101,
     input   t_state        State,
     input     logic        SelAccInst101,
@@ -45,7 +45,7 @@ import cpu_pkg::*;
 );
 // -- ctrl bits --
 logic [9:0] [15:0]Inst101;
-logic       JmpSSHit101, JmpSSHit102;
+logic       JmpSSHit101;
 logic       SsHit102 ;
 logic       M_WrEn101, D_WrEn101, A_WrEn101;
 t_jmp_cond  JmpCond101;
@@ -210,7 +210,6 @@ end // always_comb
 `MSFF(         SelImmAsAluOut102,  SelImmAsAluOut101,  Clk)
 `MSFF(         SelMorA102  ,       SelMorA101   ,      Clk)
 `MSFF(         CtrlAluOp102,       CtrlAluOp101 ,      Clk)
-`RST_MSFF(     JmpSSHit102 ,       JmpSSHit101  ,      Clk, Reset)
 `RST_MSFF(     SsHit102    ,       SsHit101     ,      Clk, Reset)
 `RST_MSFF(     D_WrEn102   ,       D_WrEn101    ,      Clk, (Reset || RstCtrlJmp103) )
 `RST_MSFF(     A_WrEn102   ,       A_WrEn101    ,      Clk, (Reset || RstCtrlJmp103) )

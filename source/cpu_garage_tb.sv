@@ -39,7 +39,6 @@ initial begin: test_seq
     force cpu_garage_tb.cpu_garage.rom_inst_17.mem = IMem; //XMR - cross module reference
     force cpu_garage_tb.cpu_garage.rom_inst_18.mem = IMem; //XMR - cross module reference
     force cpu_garage_tb.cpu_garage.rom_inst_19.mem = IMem; //XMR - cross module reference
-    force cpu_garage_tb.cpu_garage.rom_inst_20.mem = IMem; //XMR - cross module reference
 
     #100_000 $finish;
 end: test_seq

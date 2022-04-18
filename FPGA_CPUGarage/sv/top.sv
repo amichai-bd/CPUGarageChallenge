@@ -180,7 +180,7 @@ module top(
     logic [$clog2(ROM_REGISTER_COUNT)-1:0] inst_address;
 
 	 genvar i;
-	 generate for( i=0 ; i<19; i++) begin : rom_loop
+	 generate for( i=0 ; i<20; i++) begin : rom_loop
     rom #(.INSTR_WIDTH(INSTR_WIDTH),
           .ROM_REGISTER_COUNT(ROM_REGISTER_COUNT))
         rom_inst
