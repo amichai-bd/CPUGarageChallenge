@@ -1,5 +1,5 @@
 # vsim work.cpu_garage_tb -c -do "run -all" 
-# Start time: 23:11:41 on Apr 18,2022
+# Start time: 00:07:01 on Apr 19,2022
 # Loading sv_std.std
 # Loading work.cpu_garage_tb
 # Loading work.cpu_garage
@@ -14,5 +14,5 @@
 # run -all
 # ** Note: $finish    : ../source/cpu_garage_tb.sv(44)
 #    Time: 100 ns  Iteration: 0  Instance: /cpu_garage_tb
-# End time: 23:11:43 on Apr 18,2022, Elapsed time: 0:00:02
+# End time: 00:07:06 on Apr 19,2022, Elapsed time: 0:00:05
 # Errors: 0, Warnings: 0

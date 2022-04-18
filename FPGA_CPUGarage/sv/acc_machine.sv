@@ -93,6 +93,6 @@ end //always_comb
 assign SelPcAcc = ~(State == S_CHECK);
 
 assign NextAccPc = (PC100);
-`EN_MSFF (     AccPc, NextAccPc, Clk , EnAccPc)
+`EN_RST_MSFF (     AccPc, NextAccPc, Clk , EnAccPc, Reset)
 `RST_VAL_MSFF( State, NextState, Clk , Reset, S_CHECK)
 endmodule

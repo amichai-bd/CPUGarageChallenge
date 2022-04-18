@@ -66,7 +66,7 @@ logic       MatchP1Div102, MatchP2Div102, MatchP3Div102, MatchP4Div102;
 logic       SelImmAsAluOut101;
 logic [23:0] [15:0] History;
 t_inst_type InstType101;
-localparam      DIV_ACC = 1;
+localparam      DIV_ACC = 0;
 
 
 logic [20:0] [15:0] LocalInstFromAcc101;
@@ -198,19 +198,26 @@ assign Divisor  = History[15+2];
 `RST_MSFF(MatchP2Div102, MatchP2Div101,  Clk, Reset)
 `RST_MSFF(MatchP3Div102, MatchP3Div101,  Clk, Reset)
 `RST_MSFF(MatchP4Div102, MatchP4Div101,  Clk, Reset)
-assign StartDiv102 = MatchP1Div102 && MatchP2Div102 && MatchP3Div102 && MatchP4Div102 && (DIV_ACC);
+always_comb begin
+    if (DIV_ACC == 0) begin
+        StartDiv102 = 1'b0;
+    //if (DIV_ACC == 1) 
+    end else begin
+        StartDiv102 = MatchP1Div102 && MatchP2Div102 && MatchP3Div102 && MatchP4Div102;
+    end  //else
+end // always_comb
 
 // Sample Ctrl Bits 101 -> 102
 `MSFF(         SelImmAsAluOut102,  SelImmAsAluOut101,  Clk)
 `MSFF(         SelMorA102  ,       SelMorA101   ,      Clk)
 `MSFF(         CtrlAluOp102,       CtrlAluOp101 ,      Clk)
+`RST_MSFF(     JmpSSHit102 ,       JmpSSHit101  ,      Clk, Reset)
+`RST_MSFF(     SsHit102    ,       SsHit101     ,      Clk, Reset)
 `RST_MSFF(     D_WrEn102   ,       D_WrEn101    ,      Clk, (Reset || RstCtrlJmp103) )
 `RST_MSFF(     A_WrEn102   ,       A_WrEn101    ,      Clk, (Reset || RstCtrlJmp103) )
 `RST_MSFF(     M_WrEn102   ,       M_WrEn101    ,      Clk, (Reset || RstCtrlJmp103) )
-`RST_MSFF(     JmpSSHit102 ,       JmpSSHit101  ,      Clk, Reset)
-`RST_MSFF(     SsHit102    ,       SsHit101     ,      Clk, Reset)
 `RST_VAL_MSFF( JmpCond102  ,       JmpCond101   ,      Clk, (Reset || RstCtrlJmp103) , NO_JMP)
-`RST_MSFF(SelSs8Calc102 ,SelSs8Calc101  ,  Clk, Reset)
-`RST_MSFF(SelSs10Calc102,SelSs10Calc101 ,  Clk, Reset)
+`RST_MSFF(     SelSs8Calc102 ,     SelSs8Calc101  ,    Clk, (Reset || RstCtrlJmp103))
+`RST_MSFF(     SelSs10Calc102,     SelSs10Calc101 ,    Clk, (Reset || RstCtrlJmp103))
 
 endmodule
