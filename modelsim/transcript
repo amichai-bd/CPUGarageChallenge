@@ -1,14 +1,18 @@
 # vsim work.cpu_garage_tb -c -do "run -all" 
-# Start time: 15:47:33 on Apr 10,2022
+# Start time: 23:11:41 on Apr 18,2022
 # Loading sv_std.std
 # Loading work.cpu_garage_tb
 # Loading work.cpu_garage
+# Loading work.cpu_pkg
 # Loading work.cpu
-# Loading work.alu
+# Loading work.ctrl
+# Loading work.acc_machine
+# Loading work.div
 # Loading work.ram
+# Loading work.alu
 # Loading work.rom
 # run -all
-# ** Note: $finish    : ../source/cpu_garage_tb.sv(24)
-#    Time: 100001 ps  Iteration: 0  Instance: /cpu_garage_tb
-# End time: 15:47:33 on Apr 10,2022, Elapsed time: 0:00:00
+# ** Note: $finish    : ../source/cpu_garage_tb.sv(44)
+#    Time: 100 ns  Iteration: 0  Instance: /cpu_garage_tb
+# End time: 23:11:43 on Apr 18,2022, Elapsed time: 0:00:02
 # Errors: 0, Warnings: 0

@@ -1,0 +1,104 @@
+Restore Archived Project report for CPU_GARAGE
+Mon Apr 18 21:54:18 2022
+Quartus Prime Version 17.0.0 Build 595 04/25/2017 SJ Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Restore Archived Project Summary
+  3. Restore Archived Project Messages
+  4. Files Restored
+  5. Files Not Restored
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2017  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel MegaCore Function License Agreement, or other 
+applicable license agreement, including, without limitation, 
+that your use is for the sole purpose of programming logic 
+devices manufactured by Intel and sold by Intel or its 
+authorized distributors.  Please refer to the applicable 
+agreement for further details.
+
+
+
++-------------------------------------------------------------------------+
+; Restore Archived Project Summary                                        ;
++---------------------------------+---------------------------------------+
+; Restore Archived Project Status ; Successful - Mon Apr 18 21:54:18 2022 ;
+; Revision Name                   ; CPU_GARAGE                            ;
+; Top-level Entity Name           ; top                                   ;
+; Family                          ; MAX 10                                ;
++---------------------------------+---------------------------------------+
+
+
++-----------------------------------+
+; Restore Archived Project Messages ;
++-----------------------------------+
+Info: Successfully restored 'C:/Users/Amichaib/OneDrive - Intel Corporation/Desktop/my_git_hub/CPUGarageChallenge/FPGA_CPUGarage_1.qar' into the 'C:/Users/Amichaib/OneDrive - Intel Corporation/Desktop/my_git_hub/CPUGarageChallenge/FPGA_CPUGarage_1_restored/' directory
+Info: Generated report 'CPU_GARAGE.restore.rpt'
+Info (23030): Evaluation of Tcl script c:/intelfpga_lite/17.0/quartus/common/tcl/apps/qpm/qar.tcl was successful
+Info: Quartus Prime Shell was successful. 0 errors, 0 warnings
+    Info: Peak virtual memory: 4819 megabytes
+    Info: Processing ended: Mon Apr 18 21:54:19 2022
+    Info: Elapsed time: 00:00:02
+    Info: Total CPU time (on all processors): 00:00:01
+
+
++--------------------------------------+
+; Files Restored                       ;
++--------------------------------------+
+; File Name                            ;
++--------------------------------------+
+; qar_info.json                        ;
+; CPU_GARAGE.qsf                       ;
+; CPU_Garage.qpf                       ;
+; assignment_defaults.qdf              ;
+; memory/rom.hex                       ;
+; platform.sv                          ;
+; sv/acc_machine.sv                    ;
+; sv/alu.sv                            ;
+; sv/clkctrl.qip                       ;
+; sv/clkctrl.v                         ;
+; sv/cpu.sv                            ;
+; sv/cpu_pkg.sv                        ;
+; sv/ctrl.sv                           ;
+; sv/definitions.sv                    ;
+; sv/div.sv                            ;
+; sv/hex_display.sv                    ;
+; sv/number_display.sv                 ;
+; sv/numbers_bitmap.sv                 ;
+; sv/perf_counter.sv                   ;
+; sv/pll.sv                            ;
+; sv/ram.qip                           ;
+; sv/ram.v                             ;
+; sv/rom.qip                           ;
+; sv/rom.v                             ;
+; sv/seg7.sv                           ;
+; sv/square_object.sv                  ;
+; sv/submodules/clkctrl_altclkctrl_0.v ;
+; sv/sync_gen.sv                       ;
+; sv/top.sv                            ;
+; sv/vga.sv                            ;
++--------------------------------------+
+
+
++--------------------+
+; Files Not Restored ;
++--------------------+
+; File Name          ;
++--------------------+
+
+

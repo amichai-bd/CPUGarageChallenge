@@ -1,0 +1,160 @@
+m255
+K4
+z2
+!s11f vlog 2020.1 2020.02, Feb 28 2020
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/Users/Amichaib/OneDrive - Intel Corporation/Desktop/my_git_hub/CPUGarageChallenge/FPGA_CPUGarage_1_restored/original_reference/modelsim
+valu
+Z0 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
+Z1 !s110 1650312826
+!i10b 1
+!s100 K^b20XhV=Xl;^FfeTd:]W0
+Z2 !s11b Dg1SIo80bB@j0V0VzS_@n1
+I]Bf?bFczVB[4dnnD1z1Oa0
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+S1
+Z4 dC:/Users/Amichaib/OneDrive - Intel Corporation/Desktop/my_git_hub/CPUGarageChallenge/original_reference/modelsim
+Z5 w1649599431
+8../source/alu.sv
+F../source/alu.sv
+!i122 6
+L0 2 32
+Z6 OV;L;2020.1;71
+r1
+!s85 0
+31
+Z7 !s108 1650312826.000000
+!s107 ../source//definitions.sv|../source/cpu_garage_tb.sv|../source/cpu_garage.sv|../source/rom.sv|../source/ram.sv|../source/definitions.sv|../source/cpu.sv|../source/alu.sv|
+Z8 !s90 -f|cpu_garage_list.f|
+!i113 1
+Z9 !s92 +incdir+../source/
+Z10 tCvgOpt 0
+vcpu
+R0
+R1
+!i10b 1
+!s100 YP3:>5gVXzRRMzn@0iYzJ3
+R2
+I1Vn59i;08<HABDzm?ZWA`2
+R3
+S1
+R4
+R5
+8../source/cpu.sv
+F../source/cpu.sv
+!i122 6
+L0 1 73
+R6
+r1
+!s85 0
+31
+R7
+Z11 !s107 ../source//definitions.sv|../source/cpu_garage_tb.sv|../source/cpu_garage.sv|../source/rom.sv|../source/ram.sv|../source/definitions.sv|../source/cpu.sv|../source/alu.sv|
+R8
+!i113 1
+R9
+R10
+vcpu_garage
+R0
+R1
+!i10b 1
+!s100 ooWVUVdczYO_aIW:Q17iO1
+R2
+I`<ZEilHb[8I0KlhR]3P5I2
+R3
+S1
+R4
+R5
+8../source/cpu_garage.sv
+F../source/cpu_garage.sv
+!i122 6
+L0 3 57
+R6
+r1
+!s85 0
+31
+R7
+R11
+R8
+!i113 1
+R9
+R10
+vcpu_garage_tb
+R0
+R1
+!i10b 1
+!s100 JCm18X>a`e=>Ye[58PV2K3
+R2
+IcEJSclA_oBHziNban2BYQ0
+R3
+S1
+R4
+w1650312819
+8../source/cpu_garage_tb.sv
+F../source/cpu_garage_tb.sv
+!i122 6
+L0 1 59
+R6
+r1
+!s85 0
+31
+R7
+R11
+R8
+!i113 1
+R9
+R10
+vram
+R0
+R1
+!i10b 1
+!s100 f0d62j^2n?jZ=:b:N`_Om2
+R2
+IS>[Y4dX;Y01f3PXfG0_o>1
+R3
+S1
+R4
+R5
+8../source/ram.sv
+F../source/ram.sv
+!i122 6
+L0 3 43
+R6
+r1
+!s85 0
+31
+R7
+R11
+R8
+!i113 1
+R9
+R10
+vrom
+R0
+R1
+!i10b 1
+!s100 LGM2UT?m[m6Wa>iH7o0V31
+R2
+IXN5@<2CJz[WBVg339gbBQ2
+R3
+S1
+R4
+R5
+8../source/rom.sv
+F../source/rom.sv
+!i122 6
+L0 2 25
+R6
+r1
+!s85 0
+31
+R7
+R11
+R8
+!i113 1
+R9
+R10
