@@ -1,3 +1,6 @@
+FPGA_CPUGarage/CPU_GARAGE.archive.rpt
+FPGA_CPUGarage/db/CPU_GARAGE.quiproj.*.rdr.flock
+FPGA_CPUGarage_Archive.qarlog
 modelsim/work/_info
 modelsim/work/_lib.qdb
 modelsim/work/_*.qdb
@@ -9,7 +12,7 @@ FPGA_CPUGarage/*/*.bak
 modelsim/vsim.wlf
 modelsim/transcript
 FPGA_CPUGarage/output_files/*
-FPGA_CPUGarage/CPU_GARAGE.qws 
+FPGA_CPUGarage/CPU_GARAGE.qws
 FPGA_CPUGarage/db/CPU_GARAGE.asm.qmsg
 FPGA_CPUGarage/db/CPU_GARAGE.restore.qmsg
 FPGA_CPUGarage/db/CPU_GARAGE.sld_design_entry_dsc.sci
