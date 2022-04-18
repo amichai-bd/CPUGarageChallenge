@@ -1,5 +1,7 @@
 # CPUGarageChallenge
 Intel CPU Garage Challenge
+Desigin a CPU compatible with the "hack" ISA. 
+For more information regarding the specification see https://www.nand2tetris.org/
 
 ## Key Featrues
 4 Stage Pipe line
